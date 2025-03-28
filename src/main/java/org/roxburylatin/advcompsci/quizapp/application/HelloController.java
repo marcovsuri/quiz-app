@@ -1,4 +1,4 @@
-package org.roxburylatin.advcompsci.quizapp;
+package org.roxburylatin.advcompsci.quizapp.application;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

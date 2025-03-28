@@ -1,4 +1,4 @@
-package org.roxburylatin.advcompsci.quizapp;
+package org.roxburylatin.advcompsci.quizapp.application;
 
 import java.io.IOException;
 import javafx.application.Application;
