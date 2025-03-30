@@ -7,12 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 /** A Quiz */
 public class Quiz {
-  private final @NotNull HashMap<Question.Difficulty, QuestionGroup> questionGroups;
-  private int numQuestionsAsked = 0;
-  private int numQuestionsCorrect = 0;
+  private final QuizProgress quizProgress = new QuizProgress();
   private @NotNull QuestionLoader loader;
   private Question currentQuestion;
-  private boolean lastAnswerCorrect = false;
 
   /**
    * Create a quiz
@@ -20,8 +17,7 @@ public class Quiz {
    * @param questionGroups question groups for the quiz
    */
   public Quiz(@NotNull HashMap<Question.Difficulty, QuestionGroup> questionGroups) {
-    this.questionGroups = questionGroups;
-    this.loader = new ConsecutiveLoader(questionGroups);
+    this.loader = new ConsecutiveLoader(quizProgress, questionGroups);
   }
 
   /**
@@ -40,6 +36,15 @@ public class Quiz {
   }
 
   /**
+   * Get the quiz progress
+   *
+   * @return quiz progress
+   */
+  public QuizProgress getProgress() {
+    return quizProgress;
+  }
+
+  /**
    * Load the next question based on the strategy of the current loader. Once a question is
    * selected, it will continue to be returned until answered with {@link
    * Quiz#submitAnswer(Question.Choice)}
@@ -50,8 +55,8 @@ public class Quiz {
   public Question loadQuestion() {
     if (currentQuestion == null) {
       // Current question does not exist => load new question from loader
-      currentQuestion = loader.loadQuestion(lastAnswerCorrect);
-      numQuestionsAsked++;
+      currentQuestion = loader.loadQuestion();
+      quizProgress.incrementQuestionsAsked();
     }
 
     return currentQuestion;
@@ -61,30 +66,23 @@ public class Quiz {
    * Submit an answer to the selected question
    *
    * @param answer answer to the question
-   * @return whether the answer was correct
    * @throws IllegalStateException if attempting to answer a question before loading a new question
    *     using {@link Quiz#loadQuestion()}
    */
-  public boolean submitAnswer(Question.Choice answer) throws IllegalStateException {
+  public void submitAnswer(Question.Choice answer) throws IllegalStateException {
     if (currentQuestion == null) {
       // TODO - Exception Message (correct exception type just needs nice message)
       throw new IllegalStateException();
     }
 
     // Grade the selected question
-    lastAnswerCorrect = currentQuestion.grade(answer);
-
-    if (lastAnswerCorrect) {
-      numQuestionsCorrect++;
-    }
+    quizProgress.recordAnsweredQuestion(currentQuestion.grade(answer));
 
     // Update question loader
     updateLoader();
 
     // Reset current question
     currentQuestion = null;
-
-    return lastAnswerCorrect;
   }
 
   /**
@@ -93,6 +91,6 @@ public class Quiz {
    * @see QuestionLoader
    */
   private void updateLoader() {
-    loader = loader.evaluateStrategy(numQuestionsAsked, numQuestionsCorrect, questionGroups);
+    loader = loader.evaluateStrategy();
   }
 }

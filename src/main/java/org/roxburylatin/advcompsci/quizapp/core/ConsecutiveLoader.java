@@ -11,20 +11,23 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ConsecutiveLoader implements QuestionLoader {
   private final @NotNull HashMap<Question.Difficulty, QuestionGroup> questionGroups;
+  private final @NotNull QuizProgress quizProgress;
   private @NotNull Question.Difficulty currentDifficulty = Question.Difficulty.EASY;
   private int numQuestionsInDifficulty = 0;
 
   /**
    * Create a consecutive question loader
    *
+   * @param quizProgress progress of the quiz
    * @param questionGroups question groups
    */
-  public ConsecutiveLoader(@NotNull HashMap<Question.Difficulty, QuestionGroup> questionGroups) {
+  public ConsecutiveLoader(@NotNull QuizProgress quizProgress, @NotNull HashMap<Question.Difficulty, QuestionGroup> questionGroups) {
+    this.quizProgress = quizProgress;
     this.questionGroups = questionGroups;
   }
 
   @Override
-  public Question loadQuestion(boolean _lastAnswerCorrect) {
+  public Question loadQuestion() {
     // Increase difficulty every three questions
     if (numQuestionsInDifficulty != 0 && numQuestionsInDifficulty % 3 == 0) {
       currentDifficulty = QuestionLoader.increaseDifficulty(currentDifficulty);
@@ -36,23 +39,20 @@ public class ConsecutiveLoader implements QuestionLoader {
   }
 
   @Override
-  public @NotNull QuestionLoader evaluateStrategy(
-      int numQuestionsAsked,
-      int numQuestionsCorrect,
-      @NotNull HashMap<Question.Difficulty, QuestionGroup> questionGroups) {
-    if (numQuestionsAsked == 3 && numQuestionsCorrect <= 2) {
+  public @NotNull QuestionLoader evaluateStrategy() {
+    if (quizProgress.numQuestionsAsked() == 3 && quizProgress.numQuestionsCorrect() <= 2) {
       // Got at least 1 wrong in the easy difficulty => change strategy to AdaptiveLoader
-      return new AdaptiveLoader(Question.Difficulty.EASY, questionGroups);
+      return new AdaptiveLoader(quizProgress, Question.Difficulty.EASY, questionGroups);
     }
 
-    if (numQuestionsAsked == 6 && numQuestionsCorrect <= 5) {
+    if (quizProgress.numQuestionsAsked() == 6 && quizProgress.numQuestionsCorrect() <= 5) {
       // Got at least 1 wrong in the medium difficulty => change strategy to AdaptiveLoader
-      return new AdaptiveLoader(Question.Difficulty.MEDIUM, questionGroups);
+      return new AdaptiveLoader(quizProgress, Question.Difficulty.MEDIUM, questionGroups);
     }
 
-    if (numQuestionsCorrect >= 9) {
+    if (quizProgress.numQuestionsCorrect() >= 9) {
       // Has already answered nine questions correctly => change strategy to AdaptiveLoader
-      return new AdaptiveLoader(Question.Difficulty.HARD, questionGroups);
+      return new AdaptiveLoader(quizProgress, Question.Difficulty.HARD, questionGroups);
     }
 
     // Otherwise => keep strategy as ConsecutiveLoader

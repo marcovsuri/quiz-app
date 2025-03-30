@@ -1,6 +1,5 @@
 package org.roxburylatin.advcompsci.quizapp.core;
 
-import java.util.HashMap;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -52,22 +51,15 @@ public interface QuestionLoader {
   /**
    * Load a question based on the specific strategy implemented
    *
-   * @param lastAnswerCorrect whether the last answer to a question was correct
    * @return next question
    */
-  Question loadQuestion(boolean lastAnswerCorrect);
+  Question loadQuestion();
 
   /**
    * Evaluate and return the correct strategy based on the current strategy's criteria
    *
-   * @param numQuestionsAsked number of questions asked (total)
-   * @param numQuestionsCorrect number of questions answered correctly (total)
-   * @param questionGroups question groups for the quiz
    * @return correct strategy to use based on the given parameters
    */
   @NotNull
-  QuestionLoader evaluateStrategy(
-      int numQuestionsAsked,
-      int numQuestionsCorrect,
-      @NotNull HashMap<Question.Difficulty, QuestionGroup> questionGroups);
+  QuestionLoader evaluateStrategy();
 }
