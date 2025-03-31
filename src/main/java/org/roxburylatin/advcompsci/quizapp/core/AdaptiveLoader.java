@@ -15,7 +15,7 @@ public class AdaptiveLoader implements QuestionLoader {
   private @NotNull Question.Difficulty currentDifficulty;
 
   /**
-   * Create an adaptive question loader
+   * Create an adaptive question loader CHANGE
    *
    * @param quizProgress progress of the quiz
    * @param startingDifficulty starting difficulty for the adaptive loader
