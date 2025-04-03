@@ -1,5 +1,6 @@
 package org.roxburylatin.advcompsci.quizapp.backend;
 
+import com.opencsv.CSVWriter;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -87,6 +88,64 @@ public class TeacherServer {
     return csvContent.toString();
   }
 
+  /**
+   * Updates the student results for a specific chapter.
+   *
+   * @param studentFirstName the first name of the student
+   * @param studentLastName the last name of the student
+   * @param chapterNum the chapter number
+   * @param numCorrect the number of correct answers
+   */
+  private void updateStudentResults(
+      String studentFirstName, String studentLastName, int chapterNum, int numCorrect) {
+    // Locks file writing
+    fileLock.lock();
+
+    String filePath =
+        "student_results/" + studentFirstName + "_" + studentLastName + "_results.csv";
+
+    // Headers
+    String[] headers = {"first_name", "last_name", "chapter_num", "num_correct", "score"};
+
+    // New row
+    String[] newRow = {
+      studentFirstName,
+      studentLastName,
+      String.valueOf(chapterNum),
+      String.valueOf(numCorrect),
+      String.valueOf((double) numCorrect / 30.0)
+    };
+
+    File file = new File(filePath);
+    boolean fileExists = file.exists();
+
+    // If file doesn't exist, create it
+    if (!fileExists) {
+      // Todo - make try catches nicer
+      try {
+        file.createNewFile();
+      } catch (IOException e) {
+        // TODO - exception handling
+        e.printStackTrace();
+      }
+    }
+
+    // Write to file
+    try (CSVWriter writer = new CSVWriter(new FileWriter(file, true))) {
+      if (!fileExists) {
+        writer.writeNext(headers);
+      }
+
+      writer.writeNext(newRow);
+    } catch (IOException e) {
+      // TODO - handle exception
+      e.printStackTrace();
+    } finally {
+      // Unlock file writing
+      fileLock.unlock();
+    }
+  }
+
   /** Starts the server. */
   public void start() {
     // If already running, exit early after unlocking
@@ -112,7 +171,8 @@ public class TeacherServer {
                       PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
                     try {
                       // Parse the client request
-                      String clientName = in.readLine();
+                      String clientFirstName = in.readLine();
+                      String clientLastName = in.readLine();
                       RequestType requestType = RequestType.valueOf(in.readLine());
                       String jsonString = in.readLine();
                       JSONObject json = new JSONObject(jsonString);
@@ -120,8 +180,7 @@ public class TeacherServer {
                       // Handle the client request based on the request type
                       if (requestType == RequestType.GET_QUIZ_DATA) {
                         // Get the quiz data initially => return the csv contents based on the
-                        // chapter
-                        // number
+                        // chapter number
                         if (!json.has("chapterNum"))
                           throw new IllegalArgumentException("Chapter number missing in data");
 
@@ -132,6 +191,22 @@ public class TeacherServer {
 
                         out.print("SUCCESS");
                         out.println(csvContents);
+                      } else if (requestType == RequestType.SUBMIT_QUIZ) {
+                        // Check keys
+                        if (!json.has("chapterNum"))
+                          throw new IllegalArgumentException("No chapter number provided");
+                        if (!json.has("numCorrect"))
+                          throw new IllegalArgumentException(
+                              "Number of correct answers missing in data");
+
+                        // Parse data
+                        int chapterNum = json.getInt("chapterNum");
+                        int numCorrect = json.getInt("numCorrect");
+
+                        // Update CSV results
+                        updateStudentResults(
+                            clientFirstName, clientLastName, chapterNum, numCorrect);
+                        out.println("SUCCESS");
                       } else {
                         // Invalid request type
                         throw new IllegalArgumentException("Invalid request type");
@@ -170,9 +245,5 @@ public class TeacherServer {
     }
 
     setRunning(false);
-  }
-
-  public enum RequestType {
-    GET_QUIZ_DATA
   }
 }

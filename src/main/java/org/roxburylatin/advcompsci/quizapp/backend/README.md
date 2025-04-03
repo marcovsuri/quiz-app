@@ -2,9 +2,10 @@
 
 ## In
 
-First line: Full Name  
-Second Line: Type of request  
-Third Line:  Data (JSON string)
+First line: First name
+Second Line: Last name
+Third Line: Type of request  
+Fourth Line: Data (JSON string)
 
 ## Out
 

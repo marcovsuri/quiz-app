@@ -11,19 +11,23 @@ import org.json.JSONObject;
  * A Student client interface that sends requests to the teacher's server and receives responses.
  */
 public class StudentClient {
-  private final String name;
+  private final String firstName;
+  private final String lastName;
   private final String serverAddress;
   private final int serverPort;
 
   /**
-   * Creates a new StudentClient with the given name, server address, and server port.
+   * Creates a new StudentClient with the given first name, last name, server address, and server
+   * port.
    *
-   * @param name the name of the student
+   * @param firstName the first name of the student
+   * @param lastName the last name of the student
    * @param serverAddress the address of the server
    * @param serverPort the port number of the server
    */
-  public StudentClient(String name, String serverAddress, int serverPort) {
-    this.name = name;
+  public StudentClient(String firstName, String lastName, String serverAddress, int serverPort) {
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.serverAddress = serverAddress;
     this.serverPort = serverPort;
   }
@@ -36,13 +40,14 @@ public class StudentClient {
    * @return the response from the server
    * @throws Exception if there is an error sending or receiving the message
    */
-  public String send(String requestType, JSONObject jsonObject) throws Exception {
+  public String send(RequestType requestType, JSONObject jsonObject) throws Exception {
     // TODO - deal with errors
     try (Socket socket = new Socket(serverAddress, serverPort)) {
       PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
       // Send request headers
-      out.println(name);
+      out.println(firstName);
+      out.println(lastName);
       out.println(requestType);
 
       // Send the JSON object
