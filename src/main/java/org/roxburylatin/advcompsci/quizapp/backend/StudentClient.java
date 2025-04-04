@@ -5,15 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 /**
  * A Student client interface that sends requests to the teacher's server and receives responses.
  */
 public class StudentClient {
-  private final String firstName;
-  private final String lastName;
-  private final String serverAddress;
+  private final @NotNull String firstName;
+  private final @NotNull String lastName;
+  private final @NotNull String serverAddress;
   private final int serverPort;
 
   /**
@@ -25,7 +26,11 @@ public class StudentClient {
    * @param serverAddress the address of the server
    * @param serverPort the port number of the server
    */
-  public StudentClient(String firstName, String lastName, String serverAddress, int serverPort) {
+  public StudentClient(
+      @NotNull String firstName,
+      @NotNull String lastName,
+      @NotNull String serverAddress,
+      int serverPort) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.serverAddress = serverAddress;
@@ -40,7 +45,8 @@ public class StudentClient {
    * @return the response from the server
    * @throws Exception if there is an error sending or receiving the message
    */
-  public String send(RequestType requestType, JSONObject jsonObject) throws Exception {
+  public @NotNull String send(@NotNull RequestType requestType, @NotNull JSONObject jsonObject)
+      throws Exception {
     // TODO - deal with errors
     try (Socket socket = new Socket(serverAddress, serverPort)) {
       PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
@@ -51,7 +57,7 @@ public class StudentClient {
       out.println(requestType);
 
       // Send the JSON object
-      out.println(jsonObject.toString());
+      out.println(jsonObject);
 
       // Receive the response from the server => read response
       BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));

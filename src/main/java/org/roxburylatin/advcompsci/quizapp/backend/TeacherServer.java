@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 /**
@@ -14,8 +15,8 @@ import org.json.JSONObject;
  */
 public class TeacherServer {
   private final int port;
-  private final Lock runningLock;
-  private final Lock fileLock;
+  private final @NotNull Lock runningLock;
+  private final @NotNull Lock fileLock;
   private boolean running;
   private ServerSocket serverSocket;
 
@@ -69,7 +70,7 @@ public class TeacherServer {
    * @param filePath the path to the CSV file
    * @return the contents of the CSV file as a string
    */
-  private String csvToString(String filePath) {
+  private @NotNull String csvToString(@NotNull String filePath) {
     fileLock.lock();
     StringBuilder csvContent = new StringBuilder();
 
@@ -97,7 +98,10 @@ public class TeacherServer {
    * @param numCorrect the number of correct answers
    */
   private void updateStudentResults(
-      String studentFirstName, String studentLastName, int chapterNum, int numCorrect) {
+      @NotNull String studentFirstName,
+      @NotNull String studentLastName,
+      int chapterNum,
+      int numCorrect) {
     // Locks file writing
     fileLock.lock();
 
