@@ -9,30 +9,22 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 /**
- * A Student client interface that sends requests to the teacher's server and receives responses.
+ * A generic client class that sends requests to a server and receives responses.
+ *
+ * @param <T> The enum type representing different request types the client can handle
+ * @see Server
  */
-public class StudentClient {
-  private final @NotNull String firstName;
-  private final @NotNull String lastName;
+public class Client<T extends Enum<T>> {
   private final @NotNull String serverAddress;
   private final int serverPort;
 
   /**
-   * Creates a new StudentClient with the given first name, last name, server address, and server
-   * port.
+   * Constructs a new Client instance with the specified server address and port.
    *
-   * @param firstName the first name of the student
-   * @param lastName the last name of the student
    * @param serverAddress the address of the server
    * @param serverPort the port number of the server
    */
-  public StudentClient(
-      @NotNull String firstName,
-      @NotNull String lastName,
-      @NotNull String serverAddress,
-      int serverPort) {
-    this.firstName = firstName;
-    this.lastName = lastName;
+  public Client(@NotNull String serverAddress, int serverPort) {
     this.serverAddress = serverAddress;
     this.serverPort = serverPort;
   }
@@ -45,15 +37,13 @@ public class StudentClient {
    * @return the response from the server
    * @throws Exception if there is an error sending or receiving the message
    */
-  public @NotNull String send(@NotNull RequestType requestType, @NotNull JSONObject jsonObject)
-      throws Exception {
+  public @NotNull String send(@NotNull T requestType, @NotNull JSONObject jsonObject)
+      throws ServerException {
     // TODO - deal with errors
     try (Socket socket = new Socket(serverAddress, serverPort)) {
       PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
       // Send request headers
-      out.println(firstName);
-      out.println(lastName);
       out.println(requestType);
 
       // Send the JSON object
@@ -64,7 +54,7 @@ public class StudentClient {
 
       String responseStatus = in.readLine();
       if (responseStatus.equals("ERROR")) {
-        throw new Exception(in.readLine());
+        throw new ServerException(in.readLine());
       }
 
       // Read the response
