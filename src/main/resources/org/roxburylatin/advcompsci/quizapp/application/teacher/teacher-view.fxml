@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.roxburylatin.advcompsci.quizapp.application.teacher.TeacherController">
+    <children>
+        <Text layoutX="202.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quiz App (Teacher)">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Text>
+        <Text layoutX="14.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CODE:">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </Text>
+        <TabPane layoutY="72.0" prefHeight="329.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="Requests">
+                    <content>
+                        <fx:include source="requests-tab.fxml"/>
+                    </content>
+                </Tab>
+                <Tab text="In Progress">
+                    <content>
+                        <fx:include source="in-progress-tab.fxml"/>
+                    </content>
+                </Tab>
+                <Tab text="Completed">
+                    <content>
+                        <fx:include source="completed-tab.fxml"/>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+        <Text layoutX="72.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="127.0.0.1 (3000)"
+              wrappingWidth="147.6416015625">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </Text>
+        <Button layoutX="501.0" layoutY="45.0" mnemonicParsing="false" text="Start Server"/>
+        <Text layoutX="398.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server Inactive"/>
+    </children>
+</AnchorPane>
