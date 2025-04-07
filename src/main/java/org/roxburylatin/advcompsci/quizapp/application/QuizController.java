@@ -15,6 +15,9 @@ public class QuizController {
     @FXML private Button buttonD;
     @FXML private Button fiftyFiftyButton;
 
+    {
+
+    }
     // Set this value based on the current question
     private String correctAnswer = "A";  // Example: "A", "B", "C", or "D"
 

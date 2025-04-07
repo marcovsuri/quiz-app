@@ -88,4 +88,12 @@ public class Question {
     MEDIUM,
     HARD
   }
+
+  /**
+   * This method gets the correct choice for a given question.
+   * @return The correct choice (A,B,C,D) for a specific question.
+   */
+  public Choice getCorrectChoice () {
+    return correctChoice;
+  }
 }
