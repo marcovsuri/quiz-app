@@ -2,9 +2,11 @@ package org.roxburylatin.advcompsci.quizapp.application;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import org.roxburylatin.advcompsci.quizapp.core.Question;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class QuizController {
@@ -15,11 +17,18 @@ public class QuizController {
     @FXML private Button buttonD;
     @FXML private Button fiftyFiftyButton;
 
-    {
+    private Question currentQuestion;
 
+    {
+        HashMap<Question.Choice, String> choices = new HashMap<>();
+        choices.put(Question.Choice.A, "1");
+        choices.put(Question.Choice.B, "2");
+        choices.put(Question.Choice.C, "3");
+        choices.put(Question.Choice.D, "4");
+        currentQuestion = new Question("Some question", choices, Question.Choice.C, Question.Difficulty.EASY);
     }
-    // Set this value based on the current question
-    private String correctAnswer = "A";  // Example: "A", "B", "C", or "D"
+
+    private Question.Choice correctCoice;
 
     // This method is triggered by pressing the 50/50 button
     @FXML
@@ -46,10 +55,5 @@ public class QuizController {
         // Disable the 50/50 button itself
         fiftyFiftyButton.setDisable(true);
         fiftyFiftyButton.setStyle("-fx-opacity: 0.5;");
-    }
-
-    // Optional method to set the correct answer from outside
-    public void setCorrectAnswer(String letter) {
-        correctAnswer = letter;
     }
 }
