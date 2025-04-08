@@ -17,6 +17,12 @@ public class TeacherApplication extends Application {
     FXMLLoader fxmlLoader =
         new FXMLLoader(TeacherApplication.class.getResource("teacher-view.fxml"));
     Scene scene = new Scene(fxmlLoader.load());
+
+    // Load the CSS file
+    String cssPath =
+        TeacherApplication.class.getResource("teacher-view-styles.css").toExternalForm();
+    scene.getStylesheets().add(cssPath);
+
     stage.setTitle("Quiz App (Teacher View)");
     stage.setResizable(false);
     stage.setScene(scene);

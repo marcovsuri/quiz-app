@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefHeight="180.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.roxburylatin.advcompsci.quizapp.application.teacher.RequestsTabController">
-    <children>
-        <ListView prefHeight="250.0" prefWidth="600.0"/>
-        <Button layoutX="50.0" layoutY="258.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="82.0"
-                text="Accept"/>
-        <Button layoutX="468.0" layoutY="257.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="82.0" text="Deny"/>
-    </children>
-</AnchorPane>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.roxburylatin.advcompsci.quizapp.application.teacher.RequestsTabController"
+      styleClass="tab-content">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <ListView prefHeight="250.0" prefWidth="600.0" styleClass="list-view"/>
+    
+    <HBox alignment="CENTER" spacing="20">
+        <Button text="Accept" styleClass="accept"/>
+        <Button text="Deny" styleClass="deny"/>
+    </HBox>
+</VBox>
