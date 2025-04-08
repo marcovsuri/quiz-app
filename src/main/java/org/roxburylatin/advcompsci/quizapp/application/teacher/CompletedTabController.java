@@ -1,7 +1,6 @@
 package org.roxburylatin.advcompsci.quizapp.application.teacher;
 
 import javafx.collections.FXCollections;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -24,15 +23,13 @@ public class CompletedTabController {
   }
 
   private void updateStudentList() {
-    FilteredList<StudentState> completedStudents = new FilteredList<>(TeacherAppState.students,
-        student -> student.getProgress() == StudentState.Progress.COMPLETED);
-    studentListView.setItems(completedStudents);
+    studentListView
+        .setItems(TeacherAppState.getStudentsByProgress(StudentState.Progress.COMPLETED));
   }
 
   private void handleClear() {
     // Remove all completed students
-    TeacherAppState.students
-        .removeIf(student -> student.getProgress() == StudentState.Progress.COMPLETED);
+    TeacherAppState.getStudentsByProgress(StudentState.Progress.COMPLETED).clear();
     updateStudentList();
   }
 }

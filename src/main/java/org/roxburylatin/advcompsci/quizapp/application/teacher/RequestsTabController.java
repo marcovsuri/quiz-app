@@ -1,7 +1,6 @@
 package org.roxburylatin.advcompsci.quizapp.application.teacher;
 
 import javafx.collections.FXCollections;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -28,15 +27,14 @@ public class RequestsTabController {
   }
 
   private void updateStudentList() {
-    FilteredList<StudentState> requestedStudents = new FilteredList<>(TeacherAppState.students,
-        student -> student.getProgress() == StudentState.Progress.REQUESTED);
-    studentListView.setItems(requestedStudents);
+    studentListView
+        .setItems(TeacherAppState.getStudentsByProgress(StudentState.Progress.REQUESTED));
   }
 
   private void handleAccept() {
     StudentState selectedStudent = studentListView.getSelectionModel().getSelectedItem();
     if (selectedStudent != null) {
-      selectedStudent.setProgress(StudentState.Progress.IN_PROGRESS);
+      TeacherAppState.moveStudent(selectedStudent, StudentState.Progress.IN_PROGRESS);
       updateStudentList();
     }
   }
@@ -44,8 +42,10 @@ public class RequestsTabController {
   private void handleDeny() {
     StudentState selectedStudent = studentListView.getSelectionModel().getSelectedItem();
     if (selectedStudent != null) {
-      // Remove the student from the list
-      TeacherAppState.students.remove(selectedStudent);
+      // Remove the student from all lists
+      TeacherAppState.moveStudent(selectedStudent, StudentState.Progress.REQUESTED);
+      TeacherAppState.getStudentsByProgress(StudentState.Progress.REQUESTED)
+          .remove(selectedStudent);
       updateStudentList();
     }
   }
