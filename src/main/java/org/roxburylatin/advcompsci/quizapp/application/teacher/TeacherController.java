@@ -9,13 +9,18 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class TeacherController {
-  private final TeacherAppState appState = new TeacherAppState();
-  @FXML private TabPane tabPane;
-  @FXML private Button startServerButton;
-  @FXML private Text serverStatusText;
-  @FXML private VBox requestsTab;
-  @FXML private VBox inProgressTab;
-  @FXML private VBox completedTab;
+  @FXML
+  private TabPane tabPane;
+  @FXML
+  private Button startServerButton;
+  @FXML
+  private Text serverStatusText;
+  @FXML
+  private VBox requestsTab;
+  @FXML
+  private VBox inProgressTab;
+  @FXML
+  private VBox completedTab;
 
   @FXML
   public void initialize() {
@@ -34,16 +39,6 @@ public class TeacherController {
       requestsTab.getChildren().addAll(requestsContent.getChildren());
       inProgressTab.getChildren().addAll(inProgressContent.getChildren());
       completedTab.getChildren().addAll(completedContent.getChildren());
-
-      // Get the controllers
-      RequestsTabController requestsController = requestsLoader.getController();
-      InProgressTabController inProgressController = inProgressLoader.getController();
-      CompletedTabController completedController = completedLoader.getController();
-
-      // Set the app state for each controller
-      requestsController.setAppState(appState);
-      inProgressController.setAppState(appState);
-      completedController.setAppState(appState);
 
       // Set up server button action
       startServerButton.setOnAction(event -> handleServerButton());
