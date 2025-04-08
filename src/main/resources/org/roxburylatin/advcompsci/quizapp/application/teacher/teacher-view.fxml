@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Text?>
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.roxburylatin.advcompsci.quizapp.application.teacher.TeacherController"
             prefWidth="800" prefHeight="500">
@@ -14,11 +14,7 @@
             <padding>
                 <Insets top="15" right="15" bottom="15" left="15"/>
             </padding>
-            <Text text="Quiz App (Teacher)" fill="darkorange">
-                <font>
-                    <Font size="28"/>
-                </font>
-            </Text>
+            <Text text="Quiz App (Teacher)" styleClass="title"></Text>
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Text text="CODE:"/>
                 <Text text="127.0.0.1 (3000)" style="-fx-font-weight: bold;"/>

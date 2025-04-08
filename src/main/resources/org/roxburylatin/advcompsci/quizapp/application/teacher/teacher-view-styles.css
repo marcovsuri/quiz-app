@@ -125,3 +125,11 @@
     -fx-background-radius: 6px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 1);
 }
+
+/* --- Title Styling --- */
+.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: darkorange; /* changes text color */
+    -fx-font-family: "Segoe UI", sans-serif;
+}
