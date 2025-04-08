@@ -12,6 +12,10 @@ public class InProgressTabController {
   public void initialize() {
     // Initialize with empty list, will be set when appState is provided
     studentListView.setItems(FXCollections.observableArrayList());
+
+    // Listen for updates from TeacherAppState
+    TeacherAppState.needsUpdateProperty().addListener((obs, oldVal, newVal) -> updateStudentList());
+
     updateStudentList();
   }
 

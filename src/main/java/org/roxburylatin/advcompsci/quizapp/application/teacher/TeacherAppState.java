@@ -2,44 +2,63 @@ package org.roxburylatin.advcompsci.quizapp.application.teacher;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Iterator;
 import org.roxburylatin.advcompsci.quizapp.application.teacher.StudentState.Progress;
 
 public class TeacherAppState {
-  private static final Map<StudentState.Progress, ObservableList<StudentState>> studentLists =
-      new HashMap<>();
+  private static final ObservableList<StudentState> allStudents =
+      FXCollections.observableArrayList();
+  private static final BooleanProperty needsUpdate = new SimpleBooleanProperty(false);
 
   static {
-    // Initialize lists for each progress state
-    for (StudentState.Progress progress : StudentState.Progress.values()) {
-      studentLists.put(progress, FXCollections.observableArrayList());
-    }
-
     // TODO - remove (TESTING ONLY)
     StudentState student1 = new StudentState("Michael", "DiLallo");
     student1.setProgress(Progress.COMPLETED);
-    studentLists.get(Progress.COMPLETED).add(student1);
+    allStudents.add(student1);
+
     StudentState student2 = new StudentState("Avish", "Kumar");
     student2.setProgress(Progress.IN_PROGRESS);
-    studentLists.get(Progress.IN_PROGRESS).add(student2);
+    allStudents.add(student2);
+
     StudentState student3 = new StudentState("Marco", "Suri");
     student3.setProgress(Progress.REQUESTED);
-    studentLists.get(Progress.REQUESTED).add(student3);
+    allStudents.add(student3);
   }
 
   public static ObservableList<StudentState> getStudentsByProgress(StudentState.Progress progress) {
-    return studentLists.get(progress);
+    FilteredList<StudentState> filteredList =
+        new FilteredList<>(allStudents, student -> student.getProgress() == progress);
+    return filteredList;
+  }
+
+  public static BooleanProperty needsUpdateProperty() {
+    return needsUpdate;
   }
 
   public static void moveStudent(StudentState student, StudentState.Progress newProgress) {
-    // Remove from current list
-    for (ObservableList<StudentState> list : studentLists.values()) {
-      list.remove(student);
+    // Update student's progress
+    student.setProgress(newProgress);
+
+    // Signal that UI needs to update
+    needsUpdate.set(!needsUpdate.get());
+  }
+
+  public static void clearCompletedStudents() {
+    // Remove all students with COMPLETED progress
+    Iterator<StudentState> iterator = allStudents.iterator();
+    while (iterator.hasNext()) {
+      StudentState student = iterator.next();
+      if (student.getProgress() == Progress.COMPLETED) {
+        iterator.remove();
+      }
     }
 
-    // Add to new list and update student's progress
-    student.setProgress(newProgress);
-    studentLists.get(newProgress).add(student);
+    // Signal that UI needs to update
+    needsUpdate.set(!needsUpdate.get());
   }
 }

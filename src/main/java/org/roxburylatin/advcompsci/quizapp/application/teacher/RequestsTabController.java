@@ -23,6 +23,10 @@ public class RequestsTabController {
     // Set up button actions
     acceptButton.setOnAction(event -> handleAccept());
     denyButton.setOnAction(event -> handleDeny());
+
+    // Listen for updates from TeacherAppState
+    TeacherAppState.needsUpdateProperty().addListener((obs, oldVal, newVal) -> updateStudentList());
+
     updateStudentList();
   }
 
@@ -35,18 +39,15 @@ public class RequestsTabController {
     StudentState selectedStudent = studentListView.getSelectionModel().getSelectedItem();
     if (selectedStudent != null) {
       TeacherAppState.moveStudent(selectedStudent, StudentState.Progress.IN_PROGRESS);
-      updateStudentList();
     }
   }
 
   private void handleDeny() {
     StudentState selectedStudent = studentListView.getSelectionModel().getSelectedItem();
     if (selectedStudent != null) {
-      // Remove the student from all lists
+      // Remove the student from the list
       TeacherAppState.moveStudent(selectedStudent, StudentState.Progress.REQUESTED);
-      TeacherAppState.getStudentsByProgress(StudentState.Progress.REQUESTED)
-          .remove(selectedStudent);
-      updateStudentList();
+      // This will be filtered out by the FilteredList
     }
   }
 }

@@ -19,6 +19,10 @@ public class CompletedTabController {
 
     // Set up clear button action
     clearButton.setOnAction(event -> handleClear());
+
+    // Listen for updates from TeacherAppState
+    TeacherAppState.needsUpdateProperty().addListener((obs, oldVal, newVal) -> updateStudentList());
+
     updateStudentList();
   }
 
@@ -28,8 +32,8 @@ public class CompletedTabController {
   }
 
   private void handleClear() {
-    // Remove all completed students
-    TeacherAppState.getStudentsByProgress(StudentState.Progress.COMPLETED).clear();
-    updateStudentList();
+    // We need to modify the clear functionality since we're using a filtered list
+    // This will be handled by the TeacherAppState
+    TeacherAppState.clearCompletedStudents();
   }
 }
