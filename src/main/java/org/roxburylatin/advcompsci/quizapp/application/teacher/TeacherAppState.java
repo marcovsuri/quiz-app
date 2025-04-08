@@ -16,5 +16,4 @@ public class TeacherAppState {
     students.get(1).setProgress(StudentState.Progress.IN_PROGRESS);
     students.get(2).setProgress(StudentState.Progress.REQUESTED);
   }
-
 }

@@ -5,7 +5,7 @@ import javafx.beans.property.*;
 public class StudentState {
   private final StringProperty firstName = new SimpleStringProperty();
   private final StringProperty lastName = new SimpleStringProperty();
-  private ObjectProperty<Progress> progress = new SimpleObjectProperty<>();
+  private final ObjectProperty<Progress> progress = new SimpleObjectProperty<>();
 
   public StudentState(String firstName, String lastName) {
     this.firstName.set(firstName);
@@ -13,12 +13,12 @@ public class StudentState {
     this.progress.set(Progress.REQUESTED);
   }
 
-  public void setProgress(Progress progress) {
-    this.progress.set(progress);
-  }
-
   public Progress getProgress() {
     return progress.get();
+  }
+
+  public void setProgress(Progress progress) {
+    this.progress.set(progress);
   }
 
   public String getFirstName() {

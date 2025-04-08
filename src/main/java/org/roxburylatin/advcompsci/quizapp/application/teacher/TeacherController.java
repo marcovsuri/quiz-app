@@ -1,33 +1,27 @@
 package org.roxburylatin.advcompsci.quizapp.application.teacher;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.Button;
-import javafx.scene.text.Text;
-import javafx.fxml.FXMLLoader;
 import java.io.IOException;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class TeacherController {
+    private final TeacherAppState appState = new TeacherAppState();
     @FXML
     private TabPane tabPane;
-
     @FXML
     private Button startServerButton;
-
     @FXML
     private Text serverStatusText;
-
     @FXML
     private VBox requestsTab;
-
     @FXML
     private VBox inProgressTab;
-
     @FXML
     private VBox completedTab;
-
-    private final TeacherAppState appState = new TeacherAppState();
 
     @FXML
     public void initialize() {

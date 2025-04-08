@@ -4,7 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.roxburylatin.advcompsci.quizapp.application.teacher.TeacherController"
             prefWidth="800" prefHeight="500">
@@ -24,8 +23,8 @@
                 <Text text="CODE:"/>
                 <Text text="127.0.0.1 (3000)" style="-fx-font-weight: bold;"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button text="Start Server" fx:id="startServerButton" styleClass="start-server" />
-                <Text text="Server Inactive" fx:id="serverStatusText" />
+                <Button text="Start Server" fx:id="startServerButton" styleClass="start-server"/>
+                <Text text="Server Inactive" fx:id="serverStatusText"/>
             </HBox>
         </VBox>
     </top>
@@ -35,17 +34,17 @@
         <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
             <Tab text="Requests">
                 <content>
-                    <fx:include source="requests-tab.fxml"/>
+                    <VBox fx:id="requestsTab" styleClass="tab-content"/>
                 </content>
             </Tab>
             <Tab text="In Progress">
                 <content>
-                    <fx:include source="in-progress-tab.fxml"/>
+                    <VBox fx:id="inProgressTab" styleClass="tab-content"/>
                 </content>
             </Tab>
             <Tab text="Completed">
                 <content>
-                    <fx:include source="completed-tab.fxml"/>
+                    <VBox fx:id="completedTab" styleClass="tab-content"/>
                 </content>
             </Tab>
         </TabPane>

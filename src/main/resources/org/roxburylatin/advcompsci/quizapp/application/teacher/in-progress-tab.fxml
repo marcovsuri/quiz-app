@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.VBox?>
-
 <VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/23.0.1"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.roxburylatin.advcompsci.quizapp.application.teacher.InProgressTabController"
@@ -11,6 +10,6 @@
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
-    
-    <ListView prefHeight="275.0" prefWidth="600.0" styleClass="list-view" />
+
+    <ListView fx:id="studentListView" prefHeight="275.0" prefWidth="600.0" styleClass="list-view"/>
 </VBox>
