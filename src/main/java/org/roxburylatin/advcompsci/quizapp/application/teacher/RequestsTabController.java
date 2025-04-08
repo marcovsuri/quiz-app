@@ -6,14 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 
 public class RequestsTabController {
-  @FXML
-  private ListView<StudentState> studentListView;
+  @FXML private ListView<StudentState> studentListView;
 
-  @FXML
-  private Button acceptButton;
+  @FXML private Button acceptButton;
 
-  @FXML
-  private Button denyButton;
+  @FXML private Button denyButton;
 
   @FXML
   public void initialize() {
@@ -31,14 +28,16 @@ public class RequestsTabController {
   }
 
   private void updateStudentList() {
-    studentListView
-        .setItems(TeacherAppState.getStudentsByProgress(StudentState.Progress.REQUESTED));
+    studentListView.setItems(
+        TeacherAppState.getStudentsByProgress(StudentState.Progress.REQUESTED));
   }
 
   private void handleAccept() {
     StudentState selectedStudent = studentListView.getSelectionModel().getSelectedItem();
     if (selectedStudent != null) {
-      TeacherAppState.moveStudent(selectedStudent, StudentState.Progress.IN_PROGRESS);
+      selectedStudent.setProgress(StudentState.Progress.IN_PROGRESS);
+      TeacherAppState.signalUpdate();
+      System.out.println("Student Accepted");
     }
   }
 
@@ -46,8 +45,9 @@ public class RequestsTabController {
     StudentState selectedStudent = studentListView.getSelectionModel().getSelectedItem();
     if (selectedStudent != null) {
       // Remove the student from the list
-      TeacherAppState.moveStudent(selectedStudent, StudentState.Progress.REQUESTED);
-      // This will be filtered out by the FilteredList
+      TeacherAppState.removeStudent(selectedStudent);
+      System.out.println("Student Denied");
+      TeacherAppState.signalUpdate();
     }
   }
 }

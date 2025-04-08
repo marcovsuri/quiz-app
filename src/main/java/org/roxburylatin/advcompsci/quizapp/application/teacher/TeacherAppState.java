@@ -1,13 +1,10 @@
 package org.roxburylatin.advcompsci.quizapp.application.teacher;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Iterator;
 import org.roxburylatin.advcompsci.quizapp.application.teacher.StudentState.Progress;
 
 public class TeacherAppState {
@@ -40,25 +37,21 @@ public class TeacherAppState {
     return needsUpdate;
   }
 
-  public static void moveStudent(StudentState student, StudentState.Progress newProgress) {
-    // Update student's progress
-    student.setProgress(newProgress);
-
-    // Signal that UI needs to update
+  public static void signalUpdate() {
     needsUpdate.set(!needsUpdate.get());
+    System.out.println("Updated UI");
+  }
+
+  public static void addStudent(StudentState student) {
+    allStudents.add(student);
+  }
+
+  public static void removeStudent(StudentState student) {
+    allStudents.remove(student);
   }
 
   public static void clearCompletedStudents() {
     // Remove all students with COMPLETED progress
-    Iterator<StudentState> iterator = allStudents.iterator();
-    while (iterator.hasNext()) {
-      StudentState student = iterator.next();
-      if (student.getProgress() == Progress.COMPLETED) {
-        iterator.remove();
-      }
-    }
-
-    // Signal that UI needs to update
-    needsUpdate.set(!needsUpdate.get());
+    allStudents.removeIf(student -> student.getProgress() == Progress.COMPLETED);
   }
 }

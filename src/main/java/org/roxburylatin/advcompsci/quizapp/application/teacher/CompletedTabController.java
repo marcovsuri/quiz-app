@@ -6,11 +6,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 
 public class CompletedTabController {
-  @FXML
-  private ListView<StudentState> studentListView;
+  @FXML private ListView<StudentState> studentListView;
 
-  @FXML
-  private Button clearButton;
+  @FXML private Button clearButton;
 
   @FXML
   public void initialize() {
@@ -27,13 +25,15 @@ public class CompletedTabController {
   }
 
   private void updateStudentList() {
-    studentListView
-        .setItems(TeacherAppState.getStudentsByProgress(StudentState.Progress.COMPLETED));
+    studentListView.setItems(
+        TeacherAppState.getStudentsByProgress(StudentState.Progress.COMPLETED));
   }
 
   private void handleClear() {
     // We need to modify the clear functionality since we're using a filtered list
     // This will be handled by the TeacherAppState
     TeacherAppState.clearCompletedStudents();
+    System.out.println("Cleared completed students");
+    TeacherAppState.signalUpdate();
   }
 }
