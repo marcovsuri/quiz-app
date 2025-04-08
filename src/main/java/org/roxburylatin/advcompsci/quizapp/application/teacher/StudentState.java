@@ -35,6 +35,8 @@ public class StudentState {
   }
 
   public enum Progress {
-    REQUESTED, IN_PROGRESS, COMPLETED
+    REQUESTED,
+    IN_PROGRESS,
+    COMPLETED
   }
 }
