@@ -2,11 +2,18 @@ package org.roxburylatin.advcompsci.quizapp.core;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
+
+import com.opencsv.exceptions.CsvValidationException;
 import org.jetbrains.annotations.NotNull;
+import com.opencsv.*;
+
+import static org.roxburylatin.advcompsci.quizapp.core.Question.Difficulty.*;
 
 /**
  * A group of questions by difficulty for {@link Quiz}
@@ -51,31 +58,37 @@ public class QuestionGroup {
    * @throws IllegalArgumentException if the file is not formatted correctly for parsing
    */
   public static @NotNull HashMap<Question.Difficulty, QuestionGroup> generateFromFile(
-      @NotNull File file) throws FileNotFoundException, IllegalArgumentException {
+      @NotNull File file) throws IOException, IllegalArgumentException, CsvValidationException {
     ArrayList<Question> easyQuestions = new ArrayList<>();
     ArrayList<Question> mediumQuestions = new ArrayList<>();
     ArrayList<Question> hardQuestions = new ArrayList<>();
 
-    try (Scanner in = new Scanner(file)) {
-      while (in.hasNextLine()) {
-        // Read question properties in file
-        String title = in.nextLine().trim();
-
+    CSVReader reader = new CSVReaderBuilder(new FileReader(file)).build();
+    String [] nextLine;
+    reader.readNext();
+    while ((nextLine = reader.readNext()) != null) {
+      Question.Difficulty difficulty;
+      if (nextLine[1].equals("1")){
+        if (nextLine[2].equals("1")){
+          difficulty = EASY;
+        } else if (nextLine[2].equals("2")) {
+          difficulty = MEDIUM;
+        }
+        else{
+          difficulty = HARD;
+        }
+        String title = nextLine[3];
         HashMap<Question.Choice, String> choices = new HashMap<>();
-        choices.put(Question.Choice.A, in.nextLine().trim());
-        choices.put(Question.Choice.B, in.nextLine().trim());
-        choices.put(Question.Choice.C, in.nextLine().trim());
-        choices.put(Question.Choice.D, in.nextLine().trim());
+        choices.put(Question.Choice.A, nextLine[4]);
+        choices.put(Question.Choice.B, nextLine[5]);
+        choices.put(Question.Choice.C, nextLine[6]);
+        choices.put(Question.Choice.D, nextLine[7]);
 
-        // TODO - Handle parsing errors
-        String crctChoice = in.nextLine().substring(4).trim().toUpperCase();
-        Question.Choice correctChoice = Question.Choice.valueOf(crctChoice);
-        String dif = in.nextLine().substring(11).trim().toUpperCase();
-        Question.Difficulty difficulty = Question.Difficulty.valueOf(dif);
+        int crctChoice = Integer.parseInt(nextLine[8]) + 3;
+        Question.Choice correctChoice = Question.Choice.valueOf(nextLine[crctChoice]);
 
         Question question = new Question(title, choices, correctChoice, difficulty);
 
-        // Sort question correctly
         switch (difficulty) {
           case EASY:
             easyQuestions.add(question);
@@ -87,16 +100,13 @@ public class QuestionGroup {
             hardQuestions.add(question);
             break;
         }
-
-        in.nextLine();
       }
     }
-
     // Assign groups to HashMap
     HashMap<Question.Difficulty, QuestionGroup> groups = new HashMap<>();
 
     groups.put(
-        Question.Difficulty.EASY, new QuestionGroup(easyQuestions, Question.Difficulty.EASY));
+        EASY, new QuestionGroup(easyQuestions, EASY));
     groups.put(
         Question.Difficulty.MEDIUM, new QuestionGroup(mediumQuestions, Question.Difficulty.MEDIUM));
     groups.put(

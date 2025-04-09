@@ -2,7 +2,10 @@ package org.roxburylatin.advcompsci.quizapp.core;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
+
+import com.opencsv.exceptions.CsvValidationException;
 import org.jetbrains.annotations.NotNull;
 
 /** A Quiz */
@@ -28,7 +31,7 @@ public class Quiz {
    * @return new quiz
    * @throws FileNotFoundException if the file cannot be read
    */
-  public static @NotNull Quiz fromFile(@NotNull File file) throws FileNotFoundException {
+  public static @NotNull Quiz fromFile(@NotNull File file) throws IOException, CsvValidationException {
     // Generate the question groups from the file
     HashMap<Question.Difficulty, QuestionGroup> questionGroups =
         QuestionGroup.generateFromFile(file);
