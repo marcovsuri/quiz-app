@@ -8,7 +8,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.roxburylatin.advcompsci.quizapp.application.QuizController"
+            fx:controller="org.roxburylatin.advcompsci.quizapp.application.student.QuizViewController"
             prefHeight="794.0" prefWidth="843.0">
 
    <children>

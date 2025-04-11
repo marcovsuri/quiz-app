@@ -1,4 +1,4 @@
-package org.roxburylatin.advcompsci.quizapp.application;
+package org.roxburylatin.advcompsci.quizapp.application.student;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,7 +7,7 @@ import org.roxburylatin.advcompsci.quizapp.core.Question;
 
 import java.util.HashMap;
 
-public class QuizController {
+public class QuizViewController {
 
     @FXML private Button buttonA;
     @FXML private Button buttonB;
