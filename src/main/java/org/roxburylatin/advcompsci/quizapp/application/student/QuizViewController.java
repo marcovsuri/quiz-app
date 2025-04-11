@@ -17,17 +17,7 @@ public class QuizViewController {
     @FXML private Button askTeacherButton;
     @FXML private Button submitButton;
     @FXML private Text helpText;
-
-    private Question currentQuestion;
-
-    {
-        HashMap<Question.Choice, String> choices = new HashMap<>();
-        choices.put(Question.Choice.A, "1");
-        choices.put(Question.Choice.B, "2");
-        choices.put(Question.Choice.C, "3");
-        choices.put(Question.Choice.D, "4");
-        currentQuestion = new Question("Some question", choices, Question.Choice.C, Question.Difficulty.EASY);
-    }
+    @FXML private Text questionTitleText;
 
     private Question.Choice correctChoice = Question.Choice.C;
 
@@ -62,5 +52,26 @@ public class QuizViewController {
 
         // Hide help message
         helpText.setVisible(false);
+    }
+
+    @FXML
+    public void initialize() {
+        QuizViewState.needsUpdateProperty().addListener((obs, oldVal, newVal) -> updateView());
+
+        QuizViewState.updateCurrentQuestion();
+        updateView();
+    }
+
+    public void updateView() {
+        Question currentQuestion = QuizViewState.getCurrentQuestion();
+        if (currentQuestion == null) {
+            return;
+        }
+
+        questionTitleText.setText(currentQuestion.getTitle());
+        buttonA.setText(currentQuestion.getChoice(Question.Choice.A));
+        buttonB.setText(currentQuestion.getChoice(Question.Choice.B));
+        buttonC.setText(currentQuestion.getChoice(Question.Choice.C));
+        buttonD.setText(currentQuestion.getChoice(Question.Choice.D));
     }
 }
