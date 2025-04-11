@@ -6,10 +6,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="794.0" prefWidth="843.0"
-            xmlns="http://javafx.com/javafx/23.0.1"
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.roxburylatin.advcompsci.quizapp.application.QuizController">
+            fx:controller="org.roxburylatin.advcompsci.quizapp.application.QuizController"
+            prefHeight="794.0" prefWidth="843.0">
 
    <children>
       <Text layoutX="294.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question:  1/20" underline="true">
@@ -18,11 +18,14 @@
          </font>
       </Text>
 
+      <Button fx:id="askTeacherButton" layoutX="538.0" layoutY="113.0" mnemonicParsing="false"
+              prefHeight="48.0" prefWidth="93.0" text="Ask Teacher" onAction="#handleAskTeacher"/>
+
+      <Button layoutX="353.0" layoutY="113.0" mnemonicParsing="false"
+              prefHeight="48.0" prefWidth="93.0" text="Another One" />
+
       <Button fx:id="fiftyFiftyButton" layoutX="167.0" layoutY="113.0" mnemonicParsing="false"
               prefHeight="48.0" prefWidth="93.0" text="50/50" onAction="#handleFiftyFifty"/>
-
-      <Button layoutX="353.0" layoutY="113.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="93.0" text="Another One" />
-      <Button layoutX="538.0" layoutY="113.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="93.0" text="Ask Teacher" />
 
       <Text layoutX="132.0" layoutY="239.0" strokeType="OUTSIDE" strokeWidth="0.0"
             text="1. Which statement best describes a computer program?" wrappingWidth="541.21630859375">
@@ -34,15 +37,22 @@
       <Line endX="263.5" layoutX="399.0" layoutY="315.0" startX="-262.5" />
 
       <Button fx:id="buttonA" layoutX="159.0" layoutY="375.0" mnemonicParsing="false"
-              prefHeight="44.0" prefWidth="488.0" text="A. A sequence of instructions"/>
+              prefHeight="44.0" prefWidth="488.0" text="A." />
       <Button fx:id="buttonB" layoutX="159.0" layoutY="462.0" mnemonicParsing="false"
-              prefHeight="44.0" prefWidth="488.0" text="B. A type of computer hardware"/>
+              prefHeight="44.0" prefWidth="488.0" text="B." />
       <Button fx:id="buttonC" layoutX="159.0" layoutY="550.0" mnemonicParsing="false"
-              prefHeight="44.0" prefWidth="488.0" text="C. The physical part of the computer"/>
+              prefHeight="44.0" prefWidth="488.0" text="C." />
       <Button fx:id="buttonD" layoutX="159.0" layoutY="637.0" mnemonicParsing="false"
-              prefHeight="44.0" prefWidth="488.0" text="D. A device used for input"/>
+              prefHeight="44.0" prefWidth="488.0" text="D." />
 
-      <Button layoutX="372.0" layoutY="722.0" mnemonicParsing="false"
-              prefHeight="31.0" prefWidth="58.0" text="Submit" />
+      <Button fx:id="submitButton" layoutX="372.0" layoutY="722.0" mnemonicParsing="false"
+              prefHeight="31.0" prefWidth="58.0" text="Submit" onAction="#handleSubmit"/>
+
+      <Text fx:id="helpText" layoutX="250.0" layoutY="770.0" strokeType="OUTSIDE"
+            strokeWidth="0.0" text="The student has requested help! Help him." visible="false">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
