@@ -2,12 +2,12 @@ package org.roxburylatin.advcompsci.quizapp.application.teacher;
 
 import javafx.beans.property.*;
 
-public class StudentState {
+public class Student {
   private final StringProperty firstName = new SimpleStringProperty();
   private final StringProperty lastName = new SimpleStringProperty();
   private final ObjectProperty<Progress> progress = new SimpleObjectProperty<>();
 
-  public StudentState(String firstName, String lastName) {
+  public Student(String firstName, String lastName) {
     this.firstName.set(firstName);
     this.lastName.set(lastName);
     this.progress.set(Progress.REQUESTED);

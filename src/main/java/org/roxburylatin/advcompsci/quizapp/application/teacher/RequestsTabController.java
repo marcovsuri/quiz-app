@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 
 public class RequestsTabController {
-  @FXML private ListView<StudentState> studentListView;
+  @FXML private ListView<Student> studentListView;
 
   @FXML private Button acceptButton;
 
@@ -22,32 +22,32 @@ public class RequestsTabController {
     denyButton.setOnAction(event -> handleDeny());
 
     // Listen for updates from TeacherAppState
-    TeacherAppState.needsUpdateProperty().addListener((obs, oldVal, newVal) -> updateStudentList());
+    AppState.needsUpdateProperty().addListener((obs, oldVal, newVal) -> updateStudentList());
 
     updateStudentList();
   }
 
   private void updateStudentList() {
     studentListView.setItems(
-        TeacherAppState.getStudentsByProgress(StudentState.Progress.REQUESTED));
+        AppState.getStudentsByProgress(Student.Progress.REQUESTED));
   }
 
   private void handleAccept() {
-    StudentState selectedStudent = studentListView.getSelectionModel().getSelectedItem();
+    Student selectedStudent = studentListView.getSelectionModel().getSelectedItem();
     if (selectedStudent != null) {
-      selectedStudent.setProgress(StudentState.Progress.IN_PROGRESS);
-      TeacherAppState.signalUpdate();
+      selectedStudent.setProgress(Student.Progress.IN_PROGRESS);
+      AppState.signalUpdate();
       System.out.println("Student Accepted");
     }
   }
 
   private void handleDeny() {
-    StudentState selectedStudent = studentListView.getSelectionModel().getSelectedItem();
+    Student selectedStudent = studentListView.getSelectionModel().getSelectedItem();
     if (selectedStudent != null) {
       // Remove the student from the list
-      TeacherAppState.removeStudent(selectedStudent);
+      AppState.removeStudent(selectedStudent);
       System.out.println("Student Denied");
-      TeacherAppState.signalUpdate();
+      AppState.signalUpdate();
     }
   }
 }

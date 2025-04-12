@@ -5,30 +5,30 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import org.roxburylatin.advcompsci.quizapp.application.teacher.StudentState.Progress;
+import org.roxburylatin.advcompsci.quizapp.application.teacher.Student.Progress;
 
-public class TeacherAppState {
-  private static final ObservableList<StudentState> allStudents =
+public class AppState {
+  private static final ObservableList<Student> allStudents =
       FXCollections.observableArrayList();
   private static final BooleanProperty needsUpdate = new SimpleBooleanProperty(false);
 
   static {
     // TODO - remove (TESTING ONLY)
-    StudentState student1 = new StudentState("Michael", "DiLallo");
+    Student student1 = new Student("Michael", "DiLallo");
     student1.setProgress(Progress.COMPLETED);
     allStudents.add(student1);
 
-    StudentState student2 = new StudentState("Avish", "Kumar");
+    Student student2 = new Student("Avish", "Kumar");
     student2.setProgress(Progress.IN_PROGRESS);
     allStudents.add(student2);
 
-    StudentState student3 = new StudentState("Marco", "Suri");
+    Student student3 = new Student("Marco", "Suri");
     student3.setProgress(Progress.REQUESTED);
     allStudents.add(student3);
   }
 
-  public static ObservableList<StudentState> getStudentsByProgress(StudentState.Progress progress) {
-    FilteredList<StudentState> filteredList =
+  public static ObservableList<Student> getStudentsByProgress(Student.Progress progress) {
+    FilteredList<Student> filteredList =
         new FilteredList<>(allStudents, student -> student.getProgress() == progress);
     return filteredList;
   }
@@ -42,11 +42,11 @@ public class TeacherAppState {
     System.out.println("Updated UI");
   }
 
-  public static void addStudent(StudentState student) {
+  public static void addStudent(Student student) {
     allStudents.add(student);
   }
 
-  public static void removeStudent(StudentState student) {
+  public static void removeStudent(Student student) {
     allStudents.remove(student);
   }
 

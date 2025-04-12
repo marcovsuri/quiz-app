@@ -6,7 +6,7 @@ import javafx.scene.control.ListView;
 
 public class InProgressTabController {
   @FXML
-  private ListView<StudentState> studentListView;
+  private ListView<Student> studentListView;
 
   @FXML
   public void initialize() {
@@ -14,13 +14,13 @@ public class InProgressTabController {
     studentListView.setItems(FXCollections.observableArrayList());
 
     // Listen for updates from TeacherAppState
-    TeacherAppState.needsUpdateProperty().addListener((obs, oldVal, newVal) -> updateStudentList());
+    AppState.needsUpdateProperty().addListener((obs, oldVal, newVal) -> updateStudentList());
 
     updateStudentList();
   }
 
   private void updateStudentList() {
     studentListView
-        .setItems(TeacherAppState.getStudentsByProgress(StudentState.Progress.IN_PROGRESS));
+        .setItems(AppState.getStudentsByProgress(Student.Progress.IN_PROGRESS));
   }
 }

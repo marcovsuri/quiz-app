@@ -8,7 +8,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class TeacherController {
+public class TeacherViewController {
   @FXML
   private TabPane tabPane;
   @FXML
