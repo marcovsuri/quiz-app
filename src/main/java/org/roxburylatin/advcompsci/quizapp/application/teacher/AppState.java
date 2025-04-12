@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.Alert;
 import org.json.JSONObject;
 import org.roxburylatin.advcompsci.quizapp.application.Request;
 import org.roxburylatin.advcompsci.quizapp.application.teacher.Student.Progress;
@@ -79,6 +80,23 @@ public class AppState {
           return csvContentBuilder.toString();
         },
         true);
+
+    server.registerHandler(Request.ASK_FOR_HELP, (JSONObject data) -> {
+      if (!data.has("firstName") || !data.has("lastName")) throw new ServerException("Incomplete parameters");
+
+      String firstName = data.getString("firstName");
+      String lastName = data.getString("lastName");
+
+      Platform.runLater(() -> {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        alert.setTitle("Student Requested Help (Quiz App)");
+        alert.setHeaderText(firstName + " " + lastName + " has requested help!");
+        alert.showAndWait();
+      });
+
+      return "";
+    }, false);
   }
 
   public static ObservableList<Student> getStudentsByProgress(Student.Progress progress) {
