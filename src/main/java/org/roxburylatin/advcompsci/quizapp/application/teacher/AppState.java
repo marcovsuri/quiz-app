@@ -22,6 +22,7 @@ public class AppState {
   private static final ObservableList<Student> allStudents = FXCollections.observableArrayList();
   private static final BooleanProperty needsUpdate = new SimpleBooleanProperty(false);
   static Server<Request> server;
+  static final Lock IOLock = new ReentrantLock();
 
   static {
     // TODO - remove (TESTING ONLY)
@@ -40,7 +41,7 @@ public class AppState {
 
   static {
     // Server Initiation
-    server = new Server<Request>(3000, Request.class);
+    server = new Server<Request>(3000, Request.class, IOLock);
     server.registerHandler(
         Request.REQUEST_QUIZ,
         (JSONObject data) -> {
