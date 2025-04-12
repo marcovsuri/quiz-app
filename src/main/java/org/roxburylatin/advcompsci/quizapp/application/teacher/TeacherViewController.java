@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.roxburylatin.advcompsci.quizapp.application.Request;
+import org.roxburylatin.advcompsci.quizapp.backend.Server;
 
 public class TeacherViewController {
   @FXML
@@ -48,9 +50,11 @@ public class TeacherViewController {
   }
 
   private void handleServerButton() {
-    // TODO: Implement server start/stop functionality
     boolean isServerRunning = serverStatusText.getText().equals("Server Active");
     serverStatusText.setText(isServerRunning ? "Server Inactive" : "Server Active");
     startServerButton.setText(isServerRunning ? "Start Server" : "Stop Server");
+
+    // Server
+    AppState.server.start();
   }
 }
