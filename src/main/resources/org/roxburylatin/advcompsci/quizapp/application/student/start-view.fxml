@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
-
 <StackPane xmlns="http://javafx.com/javafx/23.0.1"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="org.roxburylatin.advcompsci.quizapp.application.student.StartViewController"
@@ -13,7 +12,7 @@
             text="Start Quiz"
             style="-fx-font-size: 24px;">
         <font>
-            <Font size="24.0" />
+            <Font size="24.0"/>
         </font>
     </Button>
 </StackPane>

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.web.WebView?>
-<?import javafx.geometry.Insets?>
-
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.web.*?>
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.roxburylatin.advcompsci.quizapp.application.student.QuizViewController"
@@ -18,7 +17,7 @@
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
             <Text text="Quiz App (Student)" styleClass="app-title"/>
-            <Text text="Question 1/20" styleClass="question-number"/>
+            <Text fx:id="questionNumDisplay" text="Question 1/20" styleClass="question-number"/>
         </VBox>
     </top>
 
@@ -26,42 +25,45 @@
     <center>
         <VBox alignment="TOP_CENTER" spacing="20">
             <padding>
-                <Insets top="10" right="10" bottom="10" left="10" />
+                <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
 
             <!-- Lifeline Buttons -->
             <HBox spacing="30" alignment="CENTER">
-                <Button fx:id="fiftyFiftyButton" text="50/50" onAction="#handleFiftyFifty" styleClass="lifeline-button"/>
+                <Button fx:id="fiftyFiftyButton" text="50/50" onAction="#handleFiftyFifty"
+                        styleClass="lifeline-button"/>
                 <Button fx:id="anotherOneButton" text="Another One" styleClass="lifeline-button"/>
-                <Button fx:id="askTeacherButton" text="Ask Teacher" onAction="#handleAskTeacher" styleClass="lifeline-button"/>
+                <Button fx:id="askTeacherButton" text="Ask Teacher" onAction="#handleAskTeacher"
+                        styleClass="lifeline-button"/>
             </HBox>
 
             <!-- Main Question + Answers layout -->
-            <HBox spacing="40" alignment="CENTER">
+            <HBox spacing="40" alignment="CENTER" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                 <!-- Left: Big WebView -->
-                <WebView fx:id="questionView" prefWidth="350" prefHeight="400"/>
+                <WebView fx:id="questionView" prefWidth="350" prefHeight="400" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"/>
 
                 <!-- Right: Scrollable answers -->
-                <ScrollPane fitToWidth="true" prefHeight="400" prefWidth="420">
+                <ScrollPane fx:id="questionScrollPane" fitToWidth="true" prefHeight="400" prefWidth="420"
+                            VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                     <VBox fx:id="answersBox" spacing="20">
                         <padding>
-                            <Insets top="10" right="10" bottom="10" left="10" />
+                            <Insets top="10" right="10" bottom="10" left="10"/>
                         </padding>
                         <HBox spacing="10" alignment="TOP_LEFT">
                             <RadioButton fx:id="radioA" text="A:"/>
-                            <WebView fx:id="webViewA" />
+                            <WebView fx:id="webViewA" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"/>
                         </HBox>
                         <HBox spacing="10" alignment="TOP_LEFT">
                             <RadioButton fx:id="radioB" text="B:"/>
-                            <WebView fx:id="webViewB" />
+                            <WebView fx:id="webViewB" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"/>
                         </HBox>
                         <HBox spacing="10" alignment="TOP_LEFT">
                             <RadioButton fx:id="radioC" text="C:"/>
-                            <WebView fx:id="webViewC" />
+                            <WebView fx:id="webViewC" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"/>
                         </HBox>
                         <HBox spacing="10" alignment="TOP_LEFT">
                             <RadioButton fx:id="radioD" text="D:"/>
-                            <WebView fx:id="webViewD" />
+                            <WebView fx:id="webViewD" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"/>
                         </HBox>
                     </VBox>
                 </ScrollPane>
@@ -73,7 +75,7 @@
     <bottom>
         <HBox alignment="CENTER">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20" />
+                <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
             <Button fx:id="submitButton" text="Submit" onAction="#handleSubmit" styleClass="submit-button"/>
         </HBox>

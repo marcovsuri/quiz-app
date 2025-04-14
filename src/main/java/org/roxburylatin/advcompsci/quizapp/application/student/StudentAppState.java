@@ -1,12 +1,12 @@
 package org.roxburylatin.advcompsci.quizapp.application.student;
 
 import javafx.beans.property.BooleanProperty;
-import org.roxburylatin.advcompsci.quizapp.core.*;
 import javafx.beans.property.SimpleBooleanProperty;
+import org.roxburylatin.advcompsci.quizapp.core.*;
 
 public class StudentAppState {
-    private static Quiz quiz;
     private static final BooleanProperty needsUpdate = new SimpleBooleanProperty(false);
+    private static Quiz quiz;
 
     public static BooleanProperty needsUpdateProperty() {
         return needsUpdate;

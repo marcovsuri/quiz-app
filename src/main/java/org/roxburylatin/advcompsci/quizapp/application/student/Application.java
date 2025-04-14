@@ -1,7 +1,6 @@
 package org.roxburylatin.advcompsci.quizapp.application.student;
 
 import java.io.IOException;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
