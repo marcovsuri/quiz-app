@@ -48,6 +48,9 @@ public class QuizViewController {
 
     // Load the initial question
     loadView(StudentAppState.getCurrentQuestion());
+
+    // Disable Another One Button (TODO implementation)
+    anotherOneButton.setDisable(true);
   }
 
   private void loadView(Question question) {
