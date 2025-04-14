@@ -1,5 +1,14 @@
 package org.roxburylatin.advcompsci.quizapp.application.teacher;
 
+import java.io.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -13,17 +22,11 @@ import org.roxburylatin.advcompsci.quizapp.application.teacher.Student.Progress;
 import org.roxburylatin.advcompsci.quizapp.backend.Server;
 import org.roxburylatin.advcompsci.quizapp.backend.ServerException;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 public class AppState {
+  static final Lock IOLock = new ReentrantLock();
   private static final ObservableList<Student> allStudents = FXCollections.observableArrayList();
   private static final BooleanProperty needsUpdate = new SimpleBooleanProperty(false);
   static Server<Request> server;
-  static final Lock IOLock = new ReentrantLock();
 
   static {
     // TODO - remove (TESTING ONLY)
@@ -81,22 +84,61 @@ public class AppState {
         },
         true);
 
-    server.registerHandler(Request.ASK_FOR_HELP, (JSONObject data) -> {
-      if (!data.has("firstName") || !data.has("lastName")) throw new ServerException("Incomplete parameters");
+    server.registerHandler(
+        Request.ASK_FOR_HELP,
+        (JSONObject data) -> {
+          if (!data.has("firstName") || !data.has("lastName"))
+            throw new ServerException("Incomplete parameters");
 
-      String firstName = data.getString("firstName");
-      String lastName = data.getString("lastName");
+          String firstName = data.getString("firstName");
+          String lastName = data.getString("lastName");
 
-      Platform.runLater(() -> {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+          Platform.runLater(
+              () -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
-        alert.setTitle("Student Requested Help (Quiz App)");
-        alert.setHeaderText(firstName + " " + lastName + " has requested help!");
-        alert.showAndWait();
-      });
+                alert.setTitle("Student Requested Help (Quiz App)");
+                alert.setHeaderText(firstName + " " + lastName + " has requested help!");
+                alert.showAndWait();
+              });
 
-      return "";
-    }, false);
+          return "";
+        },
+        false);
+
+    server.registerHandler(
+        Request.SUBMIT_QUIZ,
+        (JSONObject data) -> {
+          if (!data.has("firstName")
+              || !data.has("lastName")
+              || !data.has("chapterNum")
+              || !data.has("numQuestionsCorrect")
+              || !data.has("numQuestionsTotal")) throw new ServerException("Incomplete parameters");
+
+          String firstName = data.getString("firstName");
+          String lastName = data.getString("lastName");
+          int chapterNum = data.getInt("chapterNum");
+          int numQuestionsCorrect = data.getInt("numQuestionsCorrect");
+          int numQuestionsTotal = data.getInt("numQuestionsTotal");
+
+          String filePath = firstName + "_" + lastName + "_quiz_results.csv";
+
+          boolean writeHeaders = !(new File(filePath)).exists();
+
+          try (FileWriter writer = new FileWriter(filePath, true)) {
+            if (writeHeaders) {
+              writer.write("chapter_num,score");
+              writer.write('\n');
+            }
+            writer.write(chapterNum + "," + ((double) numQuestionsCorrect / (double) numQuestionsTotal));
+            writer.write('\n');
+          } catch (IOException e) {
+            throw new ServerException("Cannot write data");
+          }
+
+          return "";
+        },
+        true);
   }
 
   public static ObservableList<Student> getStudentsByProgress(Student.Progress progress) {

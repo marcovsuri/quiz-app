@@ -3,7 +3,8 @@ module org.roxburylatin.advcompsci.quizapp {
   requires javafx.fxml;
   requires org.jetbrains.annotations;
   requires org.json;
-  requires com.opencsv;
+//  requires com.opencsv;
+  requires com.fasterxml.jackson.dataformat.csv;
 
   opens org.roxburylatin.advcompsci.quizapp.application to
       javafx.fxml;
