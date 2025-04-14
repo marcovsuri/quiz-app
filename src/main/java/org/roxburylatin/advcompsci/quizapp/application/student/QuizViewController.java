@@ -2,76 +2,181 @@ package org.roxburylatin.advcompsci.quizapp.application.student;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 import org.roxburylatin.advcompsci.quizapp.core.Question;
 
-import java.util.HashMap;
-
 public class QuizViewController {
 
-    @FXML private Button buttonA;
-    @FXML private Button buttonB;
-    @FXML private Button buttonC;
-    @FXML private Button buttonD;
-    @FXML private Button fiftyFiftyButton;
-    @FXML private Button askTeacherButton;
-    @FXML private Button submitButton;
-    @FXML private Text helpText;
-    @FXML private Text questionTitleText;
+    // @FXML
+    // private Button buttonA;
+    // @FXML
+    // private Button buttonB;
+    // @FXML
+    // private Button buttonC;
+    // @FXML
+    // private Button buttonD;
+    @FXML
+    private Button fiftyFiftyButton;
+    @FXML
+    private Button askTeacherButton;
+    @FXML
+    private Button anotherOneButton;
+    @FXML
+    private Button submitButton;
+    @FXML
+    private Text helpText;
+    @FXML
+    private Text questionText;
 
-    private Question.Choice correctChoice = Question.Choice.C;
+    @FXML
+    private RadioButton radioA;
+
+    @FXML
+    private RadioButton radioB;
+
+    @FXML
+    private RadioButton radioC;
+
+    @FXML
+    private RadioButton radioD;
+
+    @FXML
+    public void initialize() {
+        ToggleGroup answerToggleGroup = new ToggleGroup();
+        radioA.setToggleGroup(answerToggleGroup);
+        radioB.setToggleGroup(answerToggleGroup);
+        radioC.setToggleGroup(answerToggleGroup);
+        radioD.setToggleGroup(answerToggleGroup);
+
+        // Listen for changes in the current question
+        StudentAppState.needsUpdateProperty().addListener((_, _, newValue) -> {
+            loadView(StudentAppState.getCurrentQuestion());
+        });
+
+        // Load the initial question
+        loadView(StudentAppState.getCurrentQuestion());
+    }
+
+    private void loadView(Question question) {
+        if (question != null) {
+            radioA.setVisible(true);
+            radioB.setVisible(true);
+            radioC.setVisible(true);
+            radioD.setVisible(true);
+
+            fiftyFiftyButton.setVisible(true);
+            askTeacherButton.setVisible(true);
+            anotherOneButton.setVisible(true);
+            submitButton.setVisible(true);
+
+            // Reset button states
+            radioA.setDisable(false);
+            radioB.setDisable(false);
+            radioC.setDisable(false);
+            radioD.setDisable(false);
+
+            // Unselect all radio buttons
+            radioA.setSelected(false);
+            radioB.setSelected(false);
+            radioC.setSelected(false);
+            radioD.setSelected(false);
+
+            // Reset helper buttons
+            fiftyFiftyButton.setDisable(false);
+            askTeacherButton.setDisable(false);
+
+            // Hide help text
+            helpText.setVisible(false);
+
+            // Set the question text
+            questionText.setText(question.getTitle());
+
+            // Set the choices
+            radioA.setText("A. " + question.getChoice(Question.Choice.A));
+            radioB.setText("B. " + question.getChoice(Question.Choice.B));
+            radioC.setText("C. " + question.getChoice(Question.Choice.C));
+            radioD.setText("D. " + question.getChoice(Question.Choice.D));
+
+            // Hide help message
+            helpText.setVisible(false);
+        } else {
+            // Reset button states
+            radioA.setVisible(false);
+            radioB.setVisible(false);
+            radioC.setVisible(false);
+            radioD.setVisible(false);
+
+            // Reset helper buttons
+            fiftyFiftyButton.setVisible(false);
+            askTeacherButton.setVisible(false);
+            anotherOneButton.setVisible(false);
+
+            submitButton.setVisible(false);
+
+            // Hide help text
+            helpText.setVisible(false);
+
+            // Set the question text
+            questionText.setText("Loading...");
+
+            // Hide help message
+            helpText.setVisible(false);
+        }
+    }
 
     @FXML
     private void handleFiftyFifty() {
-        Button[] buttons = { buttonA, buttonB, buttonC, buttonD };
+        RadioButton[] buttons = {radioA, radioB, radioC, radioD};
         int removed = 0;
 
-        for (Button button : buttons) {
-            if (!button.getText().startsWith(correctChoice.name() + ".")) {
-                button.setStyle("-fx-text-fill: gray; -fx-strikethrough: true;");
+        for (RadioButton button : buttons) {
+            if (!button.getText().startsWith(
+                    StudentAppState.getCurrentQuestion().getCorrectChoice().name() + ".")) {
                 button.setDisable(true);
                 removed++;
-                if (removed == 2) break;
+                if (removed == 2)
+                    break;
             }
         }
 
         fiftyFiftyButton.setDisable(true);
-        fiftyFiftyButton.setStyle("-fx-opacity: 0.5;");
     }
 
     @FXML
     private void handleAskTeacher() {
         helpText.setVisible(true);
         askTeacherButton.setDisable(true);
-        askTeacherButton.setStyle("-fx-opacity: 0.5;");
     }
 
     @FXML
     private void handleSubmit() {
-        // Your submit logic here...
+        // Get the selected answer
+        Question.Choice selectedAnswer = null;
+        if (radioA.isSelected()) {
+            selectedAnswer = Question.Choice.A;
+        } else if (radioB.isSelected()) {
+            selectedAnswer = Question.Choice.B;
+        } else if (radioC.isSelected()) {
+            selectedAnswer = Question.Choice.C;
+        } else if (radioD.isSelected()) {
+            selectedAnswer = Question.Choice.D;
+        }
 
-        // Hide help message
-        helpText.setVisible(false);
-    }
-
-    @FXML
-    public void initialize() {
-        QuizViewState.needsUpdateProperty().addListener((obs, oldVal, newVal) -> updateView());
-
-        QuizViewState.updateCurrentQuestion();
-        updateView();
-    }
-
-    public void updateView() {
-        Question currentQuestion = QuizViewState.getCurrentQuestion();
-        if (currentQuestion == null) {
+        if (selectedAnswer == null) {
+            // Show an alert if no answer is selected
+            javafx.scene.control.Alert alert =
+                    new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.WARNING);
+            alert.setTitle("No Answer Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select an answer choice");
+            alert.showAndWait();
             return;
         }
 
-        questionTitleText.setText(currentQuestion.getTitle());
-        buttonA.setText(currentQuestion.getChoice(Question.Choice.A));
-        buttonB.setText(currentQuestion.getChoice(Question.Choice.B));
-        buttonC.setText(currentQuestion.getChoice(Question.Choice.C));
-        buttonD.setText(currentQuestion.getChoice(Question.Choice.D));
+        StudentAppState.submitAnswer(selectedAnswer);
+
     }
 }

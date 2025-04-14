@@ -13,14 +13,10 @@ public class Application extends javafx.application.Application {
 
   @Override
   public void start(Stage stage) throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("question-view.fxml"));
-    Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-    stage.setTitle("Hello!");
+    FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("start-view.fxml"));
+    Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+    stage.setTitle("Student Quiz App");
     stage.setScene(scene);
     stage.show();
-    stage.setWidth(800);
-    stage.setHeight(600);
-
-
   }
 }
