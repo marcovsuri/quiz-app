@@ -6,18 +6,20 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import org.roxburylatin.advcompsci.quizapp.core.Question;
 
 public class QuizViewController {
 
-    // @FXML
-    // private Button buttonA;
-    // @FXML
-    // private Button buttonB;
-    // @FXML
-    // private Button buttonC;
-    // @FXML
-    // private Button buttonD;
+     @FXML
+     private Button buttonA;
+     @FXML
+     private Button buttonB;
+     @FXML
+     private Button buttonC;
+     @FXML
+     private Button buttonD;
     @FXML
     private Button fiftyFiftyButton;
     @FXML
@@ -26,10 +28,9 @@ public class QuizViewController {
     private Button anotherOneButton;
     @FXML
     private Button submitButton;
+
     @FXML
-    private Text helpText;
-    @FXML
-    private Text questionText;
+    private WebView questionView;
 
     @FXML
     private RadioButton radioA;
@@ -42,6 +43,15 @@ public class QuizViewController {
 
     @FXML
     private RadioButton radioD;
+
+    @FXML
+    private WebView webViewA;
+    @FXML
+    private WebView webViewB;
+    @FXML
+    private WebView webViewC;
+    @FXML
+    private WebView webViewD;
 
     @FXML
     public void initialize() {
@@ -88,20 +98,16 @@ public class QuizViewController {
             fiftyFiftyButton.setDisable(false);
             askTeacherButton.setDisable(false);
 
-            // Hide help text
-            helpText.setVisible(false);
-
             // Set the question text
-            questionText.setText(question.getTitle());
+            WebEngine questionViewEngine = questionView.getEngine();
+            questionViewEngine.loadContent("<h1>" + question.getTitle() + "</h1>");
 
             // Set the choices
-            radioA.setText("A. " + question.getChoice(Question.Choice.A));
-            radioB.setText("B. " + question.getChoice(Question.Choice.B));
-            radioC.setText("C. " + question.getChoice(Question.Choice.C));
-            radioD.setText("D. " + question.getChoice(Question.Choice.D));
+            webViewA.getEngine().loadContent(question.getChoice(Question.Choice.A));
+            webViewB.getEngine().loadContent(question.getChoice(Question.Choice.B));
+            webViewC.getEngine().loadContent(question.getChoice(Question.Choice.C));
+            webViewD.getEngine().loadContent(question.getChoice(Question.Choice.D));
 
-            // Hide help message
-            helpText.setVisible(false);
         } else {
             // Reset button states
             radioA.setVisible(false);
@@ -116,14 +122,9 @@ public class QuizViewController {
 
             submitButton.setVisible(false);
 
-            // Hide help text
-            helpText.setVisible(false);
-
             // Set the question text
-            questionText.setText("Loading...");
-
-            // Hide help message
-            helpText.setVisible(false);
+            WebEngine questionViewEngine = questionView.getEngine();
+            questionViewEngine.loadContent("<h1>Loading...</h1>");
         }
     }
 
@@ -147,7 +148,6 @@ public class QuizViewController {
 
     @FXML
     private void handleAskTeacher() {
-        helpText.setVisible(true);
         askTeacherButton.setDisable(true);
     }
 

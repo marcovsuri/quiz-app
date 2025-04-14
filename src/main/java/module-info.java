@@ -3,7 +3,9 @@ module org.roxburylatin.advcompsci.quizapp {
   requires javafx.fxml;
   requires org.jetbrains.annotations;
   requires transitive javafx.graphics;
+  requires javafx.web;
   requires javafx.base;
+  requires org.json;
 
   exports org.roxburylatin.advcompsci.quizapp.application.student;
 

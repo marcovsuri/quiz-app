@@ -111,6 +111,9 @@ public class StartViewController {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("question-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
 
+        // Link CSS File
+        scene.getStylesheets().add(getClass().getResource("quiz-style.css").toExternalForm());
+
         // Set the new scene
         stage.setScene(scene);
     }

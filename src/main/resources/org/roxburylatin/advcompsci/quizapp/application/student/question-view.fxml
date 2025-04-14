@@ -1,52 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.WebView?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane prefHeight="794.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.roxburylatin.advcompsci.quizapp.application.student.QuizViewController">
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.roxburylatin.advcompsci.quizapp.application.student.QuizViewController"
+            stylesheets="@quiz-style.css">
 
-    <children>
-        <Text layoutX="294.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question:  1/20" underline="true">
-            <font>
-                <Font name="Adelle Sans Devanagari Bold" size="24.0" />
-            </font>
-        </Text>
+    <!-- TOP SECTION: Title and question number -->
+    <top>
+        <VBox alignment="CENTER" spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <Text text="Quiz App (Student)" styleClass="app-title"/>
+            <Text text="Question 1/20" styleClass="question-number"/>
+        </VBox>
+    </top>
 
-        <Button fx:id="askTeacherButton" layoutX="538.0" layoutY="113.0" mnemonicParsing="false" onAction="#handleAskTeacher" prefHeight="48.0" prefWidth="93.0" text="Ask Teacher" />
+    <!-- CENTER SECTION: Main content area -->
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </padding>
 
-        <Button fx:id="anotherOneButton" layoutX="353.0" layoutY="113.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="93.0" text="Another One" />
+            <!-- Lifeline Buttons -->
+            <HBox spacing="30" alignment="CENTER">
+                <Button fx:id="fiftyFiftyButton" text="50/50" onAction="#handleFiftyFifty" styleClass="lifeline-button"/>
+                <Button fx:id="anotherOneButton" text="Another One" styleClass="lifeline-button"/>
+                <Button fx:id="askTeacherButton" text="Ask Teacher" onAction="#handleAskTeacher" styleClass="lifeline-button"/>
+            </HBox>
 
-        <Button fx:id="fiftyFiftyButton" layoutX="167.0" layoutY="113.0" mnemonicParsing="false" onAction="#handleFiftyFifty" prefHeight="48.0" prefWidth="93.0" text="50/50" />
+            <!-- Main Question + Answers layout -->
+            <HBox spacing="40" alignment="CENTER">
+                <!-- Left: Big WebView -->
+                <WebView fx:id="questionView" prefWidth="350" prefHeight="400"/>
 
-        <Text fx:id="questionText" layoutX="132.0" layoutY="239.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="541.21630859375">
-            <font>
-                <Font size="30.0" />
-            </font>
-        </Text>
+                <!-- Right: Scrollable answers -->
+                <ScrollPane fitToWidth="true" prefHeight="400" prefWidth="420">
+                    <VBox fx:id="answersBox" spacing="20">
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10" />
+                        </padding>
+                        <HBox spacing="10" alignment="TOP_LEFT">
+                            <RadioButton fx:id="radioA" text="A:"/>
+                            <WebView fx:id="webViewA" />
+                        </HBox>
+                        <HBox spacing="10" alignment="TOP_LEFT">
+                            <RadioButton fx:id="radioB" text="B:"/>
+                            <WebView fx:id="webViewB" />
+                        </HBox>
+                        <HBox spacing="10" alignment="TOP_LEFT">
+                            <RadioButton fx:id="radioC" text="C:"/>
+                            <WebView fx:id="webViewC" />
+                        </HBox>
+                        <HBox spacing="10" alignment="TOP_LEFT">
+                            <RadioButton fx:id="radioD" text="D:"/>
+                            <WebView fx:id="webViewD" />
+                        </HBox>
+                    </VBox>
+                </ScrollPane>
+            </HBox>
+        </VBox>
+    </center>
 
-        <Line endX="263.5" layoutX="399.0" layoutY="315.0" startX="-262.5" />
-
-        <!-- <ToggleGroup fx:id="answerToggleGroup"/> -->
-
-        <RadioButton fx:id="radioA" layoutX="159.0" layoutY="375.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="488.0" text="A.">
-            <toggleGroup>
-                <ToggleGroup fx:id="answerToggleGroup" />
-            </toggleGroup></RadioButton>
-        <RadioButton fx:id="radioB" layoutX="159.0" layoutY="462.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="488.0" text="B." toggleGroup="$answerToggleGroup" />
-        <RadioButton fx:id="radioC" layoutX="159.0" layoutY="550.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="488.0" text="C." toggleGroup="$answerToggleGroup" />
-        <RadioButton fx:id="radioD" layoutX="159.0" layoutY="637.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="488.0" text="D." toggleGroup="$answerToggleGroup" />
-
-        <Button fx:id="submitButton" layoutX="372.0" layoutY="722.0" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="31.0" prefWidth="58.0" text="Submit" />
-
-        <Text fx:id="helpText" layoutX="250.0" layoutY="770.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The student has requested help! Help him." visible="false">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Text>
-    </children>
-</AnchorPane>
+    <!-- BOTTOM SECTION: Submit Button -->
+    <bottom>
+        <HBox alignment="CENTER">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20" />
+            </padding>
+            <Button fx:id="submitButton" text="Submit" onAction="#handleSubmit" styleClass="submit-button"/>
+        </HBox>
+    </bottom>
+</BorderPane>
