@@ -10,7 +10,6 @@ module org.roxburylatin.advcompsci.quizapp {
 
   requires org.json;
 //  requires com.opencsv;
-  requires com.fasterxml.jackson.dataformat.csv;
 
   exports org.roxburylatin.advcompsci.quizapp.application.student;
   opens org.roxburylatin.advcompsci.quizapp.application.student to
