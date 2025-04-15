@@ -8,7 +8,9 @@ module org.roxburylatin.advcompsci.quizapp {
   opens org.roxburylatin.advcompsci.quizapp.application to
       javafx.fxml;
 
+  requires org.json;
+
   exports org.roxburylatin.advcompsci.quizapp.application;
 
-//  exports org.roxburylatin.advcompsci.quizapp;
+// exports org.roxburylatin.advcompsci.quizapp;
 }

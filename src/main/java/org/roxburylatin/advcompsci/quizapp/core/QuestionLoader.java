@@ -38,10 +38,10 @@ public interface QuestionLoader {
   static @NotNull Question.Difficulty decreaseDifficulty(@NotNull Question.Difficulty difficulty) {
     switch (difficulty) {
       case EASY, MEDIUM -> {
-        return Question.Difficulty.MEDIUM;
+        return Question.Difficulty.EASY;
       }
       case HARD -> {
-        return Question.Difficulty.HARD;
+        return Question.Difficulty.MEDIUM;
       }
       // TODO - Make this nicer => would prefer not to have this throw clause
       default -> throw new UnknownError();
