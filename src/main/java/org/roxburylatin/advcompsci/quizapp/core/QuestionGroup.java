@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.opencsv.exceptions.CsvValidationException;
 import org.jetbrains.annotations.NotNull;
 import com.opencsv.*;
@@ -63,29 +63,39 @@ public class QuestionGroup {
     ArrayList<Question> mediumQuestions = new ArrayList<>();
     ArrayList<Question> hardQuestions = new ArrayList<>();
 
-    CSVReader reader = new CSVReaderBuilder(new FileReader(file)).build();
-    String [] nextLine;
-    reader.readNext();
-    while ((nextLine = reader.readNext()) != null) {
+    Scanner csvReader = new Scanner(new File("chapter_1_questions.csv"));
+    String fileText = "";
+    csvReader.nextLine();
+    while (csvReader.hasNextLine()) {
+      fileText += csvReader.nextLine() + "\n";
+    }
+    CsvMapper mapper = new CsvMapper();
+    MappingIterator<List<String>> it = mapper
+            .readerForListOf(String.class)
+            .with(CsvParser.Feature.WRAP_AS_ARRAY)
+            .readValues(fileText);
+    while (it.hasNextValue()) {
+      List<String> row = it.nextValue();
       Question.Difficulty difficulty;
-      if (nextLine[1].equals("1")){
-        if (nextLine[2].equals("1")){
+      if (row.get(1).equals("1")){
+        if (row.get(2).equals("1")){
           difficulty = EASY;
-        } else if (nextLine[2].equals("2")) {
+        } else if (row.get(2).equals("2")) {
           difficulty = MEDIUM;
         }
         else{
           difficulty = HARD;
         }
-        String title = nextLine[3];
-        HashMap<Question.Choice, String> choices = new HashMap<>();
-        choices.put(Question.Choice.A, nextLine[4]);
-        choices.put(Question.Choice.B, nextLine[5]);
-        choices.put(Question.Choice.C, nextLine[6]);
-        choices.put(Question.Choice.D, nextLine[7]);
 
-        int crctChoice = Integer.parseInt(nextLine[8]) + 3;
-        Question.Choice correctChoice = Question.Choice.valueOf(nextLine[crctChoice]);
+        String title = row.get(3);
+        HashMap<Question.Choice, String> choices = new HashMap<>();
+        choices.put(Question.Choice.A, row.get(4));
+        choices.put(Question.Choice.B, row.get(5));
+        choices.put(Question.Choice.C, row.get(6));
+        choices.put(Question.Choice.D, row.get(7));
+
+        int crctChoice = Integer.parseInt(row.get(8)) + 3;
+        Question.Choice correctChoice = Question.Choice.valueOf(row.get(crctChoice));
 
         Question question = new Question(title, choices, correctChoice, difficulty);
 
