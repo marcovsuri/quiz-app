@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 import org.roxburylatin.advcompsci.quizapp.application.Request;
+import org.roxburylatin.advcompsci.quizapp.application.teacher.Student;
 import org.roxburylatin.advcompsci.quizapp.backend.Client;
 import org.roxburylatin.advcompsci.quizapp.backend.ServerException;
 import org.roxburylatin.advcompsci.quizapp.core.*;
@@ -142,6 +143,10 @@ public class LandingViewController {
       alert.showAndWait();
       return;
     }
+
+    // Set name globally
+    StudentAppState.firstName = firstName;
+    StudentAppState.lastName = lastName;
 
     // Add client
     StudentAppState.client = new Client<>(ipAddress, port);

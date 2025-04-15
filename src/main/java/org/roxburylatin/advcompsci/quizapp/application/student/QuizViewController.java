@@ -5,6 +5,9 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import org.json.JSONObject;
+import org.roxburylatin.advcompsci.quizapp.application.Request;
+import org.roxburylatin.advcompsci.quizapp.backend.ServerException;
 import org.roxburylatin.advcompsci.quizapp.core.Question;
 
 public class QuizViewController {
@@ -138,7 +141,35 @@ public class QuizViewController {
 
   @FXML
   private void handleAskTeacher() {
-    askTeacherButton.setDisable(true);
+    if (StudentAppState.client == null
+        || StudentAppState.firstName == null
+        || StudentAppState.lastName == null) {
+      // Should never happen...
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+
+      alert.setTitle("Error asking for help");
+      alert.setHeaderText("Unable to make requests to the teacher (client or name is null)");
+      alert.showAndWait();
+    }
+
+    // Add properties to JSON object
+    JSONObject json = new JSONObject();
+    json.put("firstName", StudentAppState.firstName);
+    json.put("lastName", StudentAppState.lastName);
+
+    // Send request
+    try {
+      StudentAppState.client.send(Request.ASK_FOR_HELP, json);
+
+      // Disable after asking successfully
+      askTeacherButton.setDisable(true);
+    } catch (ServerException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+
+      alert.setTitle("Error asking for help");
+      alert.setHeaderText("Could not communicate with teacher");
+      alert.showAndWait();
+    }
   }
 
   @FXML

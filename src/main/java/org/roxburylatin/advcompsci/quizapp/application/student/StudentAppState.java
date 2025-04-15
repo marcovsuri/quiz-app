@@ -10,6 +10,8 @@ public class StudentAppState {
     private static final BooleanProperty needsUpdate = new SimpleBooleanProperty(false);
     static Client<Request> client;
     private static Quiz quiz;
+    static String firstName = null;
+    static String lastName = null;
 
     static BooleanProperty needsUpdateProperty() {
         return needsUpdate;
