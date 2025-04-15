@@ -7,15 +7,20 @@ import java.util.Random;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.roxburylatin.advcompsci.quizapp.core.*;
 
-public class StartViewController {
-  @FXML private Button startButton;
+public class LandingViewController {
+  @FXML private Button goButton;
+  @FXML private TextField firstNameField;
+  @FXML private TextField lastNameField;
+  @FXML private TextField ipField;
+  @FXML private TextField portField;
 
-  @FXML
-  private void handleStartQuiz() throws IOException {
+  private Quiz generateDemoQuiz() {
     // TODO - Testing remove once connected with rest of app
     ArrayList<Question> easyQuestions = new ArrayList<>();
     for (int i = 0; i <= 5; i++) {
@@ -100,18 +105,54 @@ public class StartViewController {
     questionGroups.put(
         Question.Difficulty.HARD, new QuestionGroup(hardQuestions, Question.Difficulty.HARD));
 
-    Quiz quiz = new Quiz(questionGroups);
-    StudentAppState.setQuiz(quiz);
+    return new Quiz(questionGroups);
+  }
+
+  @FXML
+  private void handleStartQuiz() throws IOException {
+    // Get user input
+    String firstName = firstNameField.getText();
+    String lastName = lastNameField.getText();
+    String ipAddress = ipField.getText();
+    String portText = portField.getText();
+
+    // Ensure all fields are occupied
+    if (firstName.isEmpty() || lastName.isEmpty() || ipAddress.isEmpty() || portText.isEmpty()) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+
+      alert.setTitle("Error requesting quiz");
+      alert.setHeaderText("Please fill in all the inputs (Quiz App)");
+      alert.showAndWait();
+      return;
+    }
+
+    // Ensure port number is a number
+    int port;
+    try {
+      port = Integer.parseInt(portText);
+    } catch (NumberFormatException _) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+
+      alert.setTitle("Error requesting quiz");
+      alert.setHeaderText("Please enter a valid port number (Quiz App)");
+      alert.showAndWait();
+      return;
+    }
+
+    // TODO - Get quiz and deal with errors
+
+    // Set Quiz
+    StudentAppState.setQuiz(generateDemoQuiz());
 
     // Get the current stage
-    Stage stage = (Stage) startButton.getScene().getWindow();
+    Stage stage = (Stage) goButton.getScene().getWindow();
 
     // Load the quiz view
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("question-view.fxml"));
     Scene scene = new Scene(fxmlLoader.load(), 800, 600);
 
     // Link CSS File
-    scene.getStylesheets().add(getClass().getResource("quiz-style.css").toExternalForm());
+    //    scene.getStylesheets().add(getClass().getResource("quiz-styles.css").toExternalForm());
 
     // Set the new scene
     stage.setScene(scene);

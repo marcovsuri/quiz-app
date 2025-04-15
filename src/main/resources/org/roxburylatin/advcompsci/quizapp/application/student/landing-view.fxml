@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.roxburylatin.advcompsci.quizapp.application.student.LandingViewController"
+      alignment="CENTER" spacing="20.0"
+      prefWidth="800.0" prefHeight="600.0"
+      stylesheets="@landing-view-styles.css">
+
+    <!-- Title -->
+    <Label text="Student Quiz Portal" styleClass="title"/>
+
+    <!-- Name Fields -->
+    <HBox spacing="20" alignment="CENTER">
+        <TextField fx:id="firstNameField" promptText="First Name"/>
+        <TextField fx:id="lastNameField" promptText="Last Name"/>
+    </HBox>
+
+    <!-- IP and Port Fields -->
+    <HBox spacing="20" alignment="CENTER">
+        <TextField fx:id="ipField" promptText="IP Address"/>
+        <TextField fx:id="portField" promptText="Port"/>
+    </HBox>
+
+    <!-- Go Button -->
+    <Button fx:id="goButton"
+            text="Go"
+            onAction="#handleStartQuiz"
+            styleClass="go-button"/>
+
+</VBox>
