@@ -1,7 +1,6 @@
 package org.roxburylatin.advcompsci.quizapp.core;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,17 +20,18 @@ public class Quiz {
   }
 
   /**
-   * Load a quiz from a file questions, answer choices, difficulty, and correct answers are stored
-   * (same loading strategy as {@link QuestionGroup#generateFromFile(File)}
+   * Creates a new Quiz instance from the provided CSV content.
    *
-   * @param file file
-   * @return new quiz
-   * @throws FileNotFoundException if the file cannot be read
+   * @param contents The CSV content as a non-null string. The content should adhere to the expected
+   *     format for generating question groups.
+   * @return A new Quiz instance populated with question groups parsed from the CSV content.
+   * @throws IOException If an error occurs while processing the CSV content.
+   * @see QuestionGroup#generateFromCsvContents(String)
    */
-  public static @NotNull Quiz fromFile(@NotNull File file) throws FileNotFoundException {
+  public static @NotNull Quiz fromCsvContent(@NotNull String contents) throws IOException {
     // Generate the question groups from the file
     HashMap<Question.Difficulty, QuestionGroup> questionGroups =
-        QuestionGroup.generateFromFile(file);
+        QuestionGroup.generateFromCsvContents(contents);
     return new Quiz(questionGroups);
   }
 
