@@ -75,7 +75,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                org.roxburylatin.advcompsci.quizapp/org.roxburylatin.advcompsci.quizapp.application.student.Application
+                                org.roxburylatin.advcompsci.quizapp/org.roxburylatin.advcompsci.quizapp.application.HelloApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
