@@ -35,11 +35,11 @@ public class Server<T extends Enum<T>> {
    * @param port The port number on which the server will listen for client connections
    * @param requestClass The class of the enum type representing different request types
    */
-  public Server(int port, @NotNull Class<T> requestClass) {
+  public Server(int port, @NotNull Class<T> requestClass, Lock IOLock) {
     this.port = port;
     running = false;
     runningLock = new ReentrantLock();
-    fileLock = new ReentrantLock();
+    fileLock = IOLock;
     this.requestClass = requestClass;
   }
 
