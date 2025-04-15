@@ -1,19 +1,15 @@
 package org.roxburylatin.advcompsci.quizapp.core;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
+import static org.roxburylatin.advcompsci.quizapp.core.Question.Difficulty.*;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
-import com.opencsv.exceptions.CsvValidationException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
 import org.jetbrains.annotations.NotNull;
-import com.opencsv.*;
-
-import static org.roxburylatin.advcompsci.quizapp.core.Question.Difficulty.*;
 
 /**
  * A group of questions by difficulty for {@link Quiz}
@@ -58,7 +54,7 @@ public class QuestionGroup {
    * @throws IllegalArgumentException if the file is not formatted correctly for parsing
    */
   public static @NotNull HashMap<Question.Difficulty, QuestionGroup> generateFromFile(
-      @NotNull File file) throws IOException, IllegalArgumentException, CsvValidationException {
+      @NotNull File file) throws IOException, IllegalArgumentException {
     ArrayList<Question> easyQuestions = new ArrayList<>();
     ArrayList<Question> mediumQuestions = new ArrayList<>();
     ArrayList<Question> hardQuestions = new ArrayList<>();
@@ -70,20 +66,20 @@ public class QuestionGroup {
       fileText += csvReader.nextLine() + "\n";
     }
     CsvMapper mapper = new CsvMapper();
-    MappingIterator<List<String>> it = mapper
+    MappingIterator<List<String>> it =
+        mapper
             .readerForListOf(String.class)
             .with(CsvParser.Feature.WRAP_AS_ARRAY)
             .readValues(fileText);
     while (it.hasNextValue()) {
       List<String> row = it.nextValue();
       Question.Difficulty difficulty;
-      if (row.get(1).equals("1")){
-        if (row.get(2).equals("1")){
+      if (row.get(1).equals("1")) {
+        if (row.get(2).equals("1")) {
           difficulty = EASY;
         } else if (row.get(2).equals("2")) {
           difficulty = MEDIUM;
-        }
-        else{
+        } else {
           difficulty = HARD;
         }
 
@@ -94,8 +90,8 @@ public class QuestionGroup {
         choices.put(Question.Choice.C, row.get(6));
         choices.put(Question.Choice.D, row.get(7));
 
-        int crctChoice = Integer.parseInt(row.get(8)) + 3;
-        Question.Choice correctChoice = Question.Choice.valueOf(row.get(crctChoice));
+        int crctChoice = Integer.parseInt(row.get(8));
+        Question.Choice correctChoice = Question.Choice.fromInt(crctChoice);
 
         Question question = new Question(title, choices, correctChoice, difficulty);
 
@@ -115,8 +111,7 @@ public class QuestionGroup {
     // Assign groups to HashMap
     HashMap<Question.Difficulty, QuestionGroup> groups = new HashMap<>();
 
-    groups.put(
-        EASY, new QuestionGroup(easyQuestions, EASY));
+    groups.put(EASY, new QuestionGroup(easyQuestions, EASY));
     groups.put(
         Question.Difficulty.MEDIUM, new QuestionGroup(mediumQuestions, Question.Difficulty.MEDIUM));
     groups.put(
