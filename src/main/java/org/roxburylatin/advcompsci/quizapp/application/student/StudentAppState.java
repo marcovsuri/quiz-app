@@ -2,13 +2,16 @@ package org.roxburylatin.advcompsci.quizapp.application.student;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import org.roxburylatin.advcompsci.quizapp.application.Request;
+import org.roxburylatin.advcompsci.quizapp.backend.Client;
 import org.roxburylatin.advcompsci.quizapp.core.*;
 
 public class StudentAppState {
     private static final BooleanProperty needsUpdate = new SimpleBooleanProperty(false);
+    static Client<Request> client;
     private static Quiz quiz;
 
-    public static BooleanProperty needsUpdateProperty() {
+    static BooleanProperty needsUpdateProperty() {
         return needsUpdate;
     }
 
@@ -17,18 +20,18 @@ public class StudentAppState {
         System.out.println("Updated UI");
     }
 
-    public static Question getCurrentQuestion() {
+     static Question getCurrentQuestion() {
         if (quiz == null)
             return null;
 
         return quiz.loadQuestion();
     }
 
-    public static void setQuiz(Quiz quiz) {
+    static void setQuiz(Quiz quiz) {
         StudentAppState.quiz = quiz;
     }
 
-    public static void submitAnswer(Question.Choice answer) {
+    static void submitAnswer(Question.Choice answer) {
         if (quiz == null)
             return;
 

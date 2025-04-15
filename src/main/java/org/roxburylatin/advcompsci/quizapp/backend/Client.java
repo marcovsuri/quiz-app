@@ -62,6 +62,7 @@ public class Client<T extends Enum<T>> {
       String line;
       while ((line = in.readLine()) != null) {
         response.append(line);
+        response.append('\n');
       }
 
       return response.toString();

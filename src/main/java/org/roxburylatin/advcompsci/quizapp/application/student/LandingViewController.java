@@ -11,6 +11,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.json.JSONObject;
+import org.roxburylatin.advcompsci.quizapp.application.Request;
+import org.roxburylatin.advcompsci.quizapp.backend.Client;
+import org.roxburylatin.advcompsci.quizapp.backend.ServerException;
 import org.roxburylatin.advcompsci.quizapp.core.*;
 
 public class LandingViewController {
@@ -139,10 +143,44 @@ public class LandingViewController {
       return;
     }
 
-    // TODO - Get quiz and deal with errors
+    // Add client
+    StudentAppState.client = new Client<>(ipAddress, port);
+
+    // Add JSON parameters for requesting quizzes
+    JSONObject json = new JSONObject();
+
+    json.put("firstName", firstName);
+    json.put("lastName", lastName);
+    json.put("chapterNum", 1); // TODO - change
+
+    // Get quiz
+    String quizCsvContents;
+    try {
+      quizCsvContents = StudentAppState.client.send(Request.REQUEST_QUIZ, json);
+    } catch (ServerException e) {
+      System.out.println(e.getMessage());
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+
+      alert.setTitle("Error requesting quiz");
+      alert.setHeaderText("Could not retrieve quiz");
+      alert.showAndWait();
+      return;
+    }
+
+    // Load quiz from csv contents
+    Quiz quiz = null;
+    try {
+      quiz = Quiz.fromCsvContent(quizCsvContents);
+    } catch (IOException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+
+      alert.setTitle("Error requesting quiz");
+      alert.setHeaderText("Received incorrect quiz format");
+      alert.showAndWait();
+    }
 
     // Set Quiz
-    StudentAppState.setQuiz(generateDemoQuiz());
+    StudentAppState.setQuiz(quiz);
 
     // Get the current stage
     Stage stage = (Stage) goButton.getScene().getWindow();
@@ -150,9 +188,6 @@ public class LandingViewController {
     // Load the quiz view
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("question-view.fxml"));
     Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-
-    // Link CSS File
-    //    scene.getStylesheets().add(getClass().getResource("quiz-styles.css").toExternalForm());
 
     // Set the new scene
     stage.setScene(scene);

@@ -7,9 +7,7 @@ module org.roxburylatin.advcompsci.quizapp {
   requires javafx.base;
   requires com.fasterxml.jackson.dataformat.csv;
   requires com.fasterxml.jackson.databind;
-
   requires org.json;
-//  requires com.opencsv;
 
   exports org.roxburylatin.advcompsci.quizapp.application.student;
   opens org.roxburylatin.advcompsci.quizapp.application.student to

@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.jetbrains.annotations.NotNull;
@@ -134,7 +135,11 @@ public class Server<T extends Enum<T>> {
 
                       // Send the response to the client
                       out.println("SUCCESS");
-                      out.println(response);
+
+                      String[] lines = response.split("\n");
+                      for (String line : lines) {
+                        out.println(line);
+                      }
                     } catch (ServerException e) {
                       // Send an error response to the client
                       out.println("ERROR");
