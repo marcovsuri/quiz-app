@@ -2,11 +2,15 @@ module org.roxburylatin.advcompsci.quizapp {
   requires javafx.controls;
   requires javafx.fxml;
   requires org.jetbrains.annotations;
-  requires org.json;
-  requires com.opencsv;
+  requires com.fasterxml.jackson.dataformat.csv;
+  requires com.fasterxml.jackson.databind;
 
-  opens org.roxburylatin.advcompsci.quizapp.application to javafx.fxml;
+  opens org.roxburylatin.advcompsci.quizapp.application to
+      javafx.fxml;
+
+  requires org.json;
+
   exports org.roxburylatin.advcompsci.quizapp.application;
 
-//  exports org.roxburylatin.advcompsci.quizapp;
+// exports org.roxburylatin.advcompsci.quizapp;
 }
