@@ -76,10 +76,32 @@ public class Question {
 
   /** Choices for a quiz question */
   public enum Choice {
-    A,
-    B,
-    C,
-    D
+    A(1),
+    B(2),
+    C(3),
+    D(4);
+
+    private final int value;
+
+    Choice(int value) {
+      this.value = value;
+    }
+
+    /**
+     * Turn an int into a Choice (1=A;2=B;3=C;4=D)
+     *
+     * @param value int
+     * @return corresponding choice
+     * @throws IllegalArgumentException if the int does not correspond to a choice
+     */
+    public static Choice fromInt(int value) throws IllegalArgumentException {
+      for (Choice choice : Choice.values()) {
+        if (choice.value == value) {
+          return choice;
+        }
+      }
+      throw new IllegalArgumentException("No enum constant with value " + value);
+    }
   }
 
   /** Quiz question difficulties */
@@ -87,5 +109,13 @@ public class Question {
     EASY,
     MEDIUM,
     HARD
+  }
+
+  /**
+   * This method gets the correct choice for a given question.
+   * @return The correct choice (A,B,C,D) for a specific question.
+   */
+  public Choice getCorrectChoice () {
+    return correctChoice;
   }
 }
