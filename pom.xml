@@ -25,7 +25,11 @@
             <artifactId>javafx-fxml</artifactId>
             <version>23.0.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>23.0.1</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -53,11 +57,6 @@
             <artifactId>json</artifactId>
             <version>20250107</version>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-csv</artifactId>
-            <version>2.18.2</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -81,7 +80,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                org.roxburylatin.advcompsci.quizapp/org.roxburylatin.advcompsci.quizapp.application.HelloApplication
+                                org.roxburylatin.advcompsci.quizapp/org.roxburylatin.advcompsci.quizapp.application.student.Application
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
