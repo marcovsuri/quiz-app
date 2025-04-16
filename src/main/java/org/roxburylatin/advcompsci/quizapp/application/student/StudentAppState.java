@@ -9,9 +9,11 @@ import org.roxburylatin.advcompsci.quizapp.core.*;
 public class StudentAppState {
     private static final BooleanProperty needsUpdate = new SimpleBooleanProperty(false);
     static Client<Request> client;
-    private static Quiz quiz;
     static String firstName = null;
     static String lastName = null;
+    static Integer chapterNum = null;
+    static boolean quizSubmitted = false;
+    private static Quiz quiz;
 
     static BooleanProperty needsUpdateProperty() {
         return needsUpdate;
@@ -29,10 +31,6 @@ public class StudentAppState {
         return quiz.loadQuestion();
     }
 
-    static void setQuiz(Quiz quiz) {
-        StudentAppState.quiz = quiz;
-    }
-
     static void submitAnswer(Question.Choice answer) {
         if (quiz == null)
             return;
@@ -43,6 +41,10 @@ public class StudentAppState {
 
     static Quiz getQuiz() {
         return quiz;
+    }
+
+    static void setQuiz(Quiz quiz) {
+        StudentAppState.quiz = quiz;
     }
 
 }

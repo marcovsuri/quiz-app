@@ -1,14 +1,9 @@
 package org.roxburylatin.advcompsci.quizapp.application.teacher;
 
 import java.io.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -61,8 +56,21 @@ public class AppState {
               () -> {
                 Student student = new Student(firstName, lastName);
                 student.setProgress(Progress.IN_PROGRESS);
-                addStudent(student);
-                System.out.println("ADDED STUDENT");
+                try {
+                  addStudent(student);
+                  System.out.println("ADDED STUDENT");
+                } catch (IllegalArgumentException e) {
+                  Alert alert = new Alert(Alert.AlertType.WARNING);
+
+                  alert.setTitle("Duplicate Student");
+                  alert.setHeaderText(
+                      "A student with the name "
+                          + firstName
+                          + " "
+                          + lastName
+                          + " has registered for his quiz there is another student with the same name. The new student has been given the quiz.");
+                  alert.showAndWait();
+                }
               });
 
           int chapterNum = data.getInt("chapterNum");
@@ -130,11 +138,40 @@ public class AppState {
               writer.write("chapter_num,score");
               writer.write('\n');
             }
-            writer.write(chapterNum + "," + ((double) numQuestionsCorrect / (double) numQuestionsTotal));
+            writer.write(
+                chapterNum + "," + ((double) numQuestionsCorrect / (double) numQuestionsTotal));
             writer.write('\n');
           } catch (IOException e) {
             throw new ServerException("Cannot write data");
           }
+
+          // Move student to completed
+          // Ensure UI changes happen on the right thread
+          Platform.runLater(
+              () -> {
+                Student student = getStudent(firstName, lastName);
+                if (student == null) {
+                  Alert alert = new Alert(Alert.AlertType.WARNING);
+
+                  alert.setTitle("Missing Student");
+                  alert.setHeaderText(
+                      "A student with the name "
+                          + firstName
+                          + " "
+                          + lastName
+                          + " has submitted his quiz but is unrecognized. His quiz progress is saved.");
+                  alert.showAndWait();
+                  return;
+                }
+
+                // Change student's status
+                student.setProgress(Progress.COMPLETED);
+
+                // Signal update after changing student's status
+                signalUpdate();
+
+                System.out.println("STUDENT FINISHED");
+              });
 
           return "";
         },
@@ -156,8 +193,27 @@ public class AppState {
     System.out.println("Updated UI");
   }
 
-  public static void addStudent(Student student) {
+  public static void addStudent(Student student) throws IllegalArgumentException {
+    // TODO - implement
+    //    if (getStudent(student.getFirstName(), student.getLastName()) != null) {
+    //      throw new IllegalArgumentException(
+    //          "A student with the same first name and last name already exists.");
+    //    }
+
     allStudents.add(student);
+  }
+
+  public static Student getStudent(String firstName, String lastName) {
+    Student s =
+        allStudents.stream()
+            .filter(
+                student ->
+                    Objects.equals(student.getFirstName(), firstName)
+                        && Objects.equals(student.getLastName(), lastName))
+            .findFirst()
+            .orElse(null);
+
+    return s;
   }
 
   public static void removeStudent(Student student) {
