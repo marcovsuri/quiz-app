@@ -9,8 +9,14 @@ module org.roxburylatin.advcompsci.quizapp {
       javafx.fxml;
 
   requires org.json;
+  requires com.fasterxml.jackson.dataformat.csv;
+
+  opens org.roxburylatin.advcompsci.quizapp.application to
+      javafx.fxml;
 
   exports org.roxburylatin.advcompsci.quizapp.application;
+  exports org.roxburylatin.advcompsci.quizapp.application.teacher;
 
-// exports org.roxburylatin.advcompsci.quizapp;
+  opens org.roxburylatin.advcompsci.quizapp.application.teacher to
+      javafx.fxml;
 }

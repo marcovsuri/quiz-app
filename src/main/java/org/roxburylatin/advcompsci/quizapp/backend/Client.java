@@ -35,7 +35,7 @@ public class Client<T extends Enum<T>> {
    * @param requestType the type of request to send
    * @param jsonObject the JSON object to send
    * @return the response from the server
-   * @throws Exception if there is an error sending or receiving the message
+   * @throws ServerException if there is an error sending or receiving the message
    */
   public @NotNull String send(@NotNull T requestType, @NotNull JSONObject jsonObject)
       throws ServerException {
@@ -66,9 +66,7 @@ public class Client<T extends Enum<T>> {
 
       return response.toString();
     } catch (IOException e) {
-      // TODO - deal with errors
-      System.err.println("Error sending message: " + e.getMessage());
-      return null;
+      throw new ServerException("Unable to connect to server");
     }
   }
 }
