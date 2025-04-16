@@ -100,6 +100,8 @@ public class QuizViewController {
       webViewC.getEngine().loadContent(question.getChoice(Question.Choice.C));
       webViewD.getEngine().loadContent(question.getChoice(Question.Choice.D));
 
+      questionNumDisplay.setText("Question " + StudentAppState.getQuiz().getProgress().numQuestionsAsked() + "/20");
+
     } else {
       //            // Reset button states
       //            radioA.setVisible(false);
@@ -188,8 +190,7 @@ public class QuizViewController {
 
     if (selectedAnswer == null) {
       // Show an alert if no answer is selected
-      javafx.scene.control.Alert alert =
-          new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.WARNING);
+      Alert alert = new Alert(Alert.AlertType.WARNING);
       alert.setTitle("No Answer Selected");
       alert.setHeaderText(null);
       alert.setContentText("Please select an answer choice");
@@ -198,5 +199,13 @@ public class QuizViewController {
     }
 
     StudentAppState.submitAnswer(selectedAnswer);
+
+    if (StudentAppState.getQuiz().getProgress().isQuizFinished()) {
+      Alert alert = new Alert(Alert.AlertType.INFORMATION);
+      alert.setTitle("DONE");
+      alert.setHeaderText(null);
+      alert.setContentText("DONE!");
+      alert.showAndWait();
+    }
   }
 }

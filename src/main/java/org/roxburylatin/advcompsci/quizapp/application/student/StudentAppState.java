@@ -40,4 +40,9 @@ public class StudentAppState {
         quiz.submitAnswer(answer);
         signalUpdate();
     }
+
+    static Quiz getQuiz() {
+        return quiz;
+    }
+
 }

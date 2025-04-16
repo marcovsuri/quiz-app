@@ -53,4 +53,8 @@ public class QuizProgress {
       numQuestionsCorrect++;
     }
   }
+
+  public boolean isQuizFinished() {
+      return numQuestionsAsked == 20;
+  }
 }

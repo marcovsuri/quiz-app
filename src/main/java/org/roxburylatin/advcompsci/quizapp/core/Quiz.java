@@ -97,15 +97,4 @@ public class Quiz {
         loader = loader.evaluateStrategy();
     }
 
-    public boolean isQuizFinished() {
-        if (quizProgress.numQuestionsAsked() <= 20) {
-            return false;
-        }
-        return true;
-    }
-
-    public double scoreQuiz() {
-        double score = (double) quizProgress.numQuestionsCorrect() / quizProgress.numQuestionsAsked();
-        return score;
-    }
 }
