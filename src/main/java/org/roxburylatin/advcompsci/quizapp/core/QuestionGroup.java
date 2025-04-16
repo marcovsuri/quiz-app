@@ -1,11 +1,12 @@
 package org.roxburylatin.advcompsci.quizapp.core;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Scanner;
+import static org.roxburylatin.advcompsci.quizapp.core.Question.Difficulty.*;
+
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
+import java.io.IOException;
+import java.util.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -43,39 +44,76 @@ public class QuestionGroup {
   }
 
   /**
-   * Generate question groups from a questions file
+   * Generates a mapping of question difficulties to their respective QuestionGroup objects from the
+   * contents of a CSV file.
    *
-   * @param file file from which to generate groups
-   * @return questions organized into groups, based on difficulty
-   * @throws FileNotFoundException if the file cannot be read
-   * @throws IllegalArgumentException if the file is not formatted correctly for parsing
+   * <p>The CSV contents should be provided as a string, where each row represents a question and
+   * contains the following columns:
+   *
+   * <ul>
+   *   <li>Column 1: A flag indicating whether the row represents a question (value "1").
+   *   <li>Column 2: The difficulty level of the question (1 for EASY, 2 for MEDIUM, 3 for HARD).
+   *   <li>Column 3: The title of the question.
+   *   <li>Columns 4-7: The text for the four answer choices (A, B, C, D).
+   *   <li>Column 8: The integer representation of the correct answer choice (1 for A, 2 for B,
+   *       etc.).
+   * </ul>
+   *
+   * <p>The method parses the CSV contents, creates Question objects for each valid row, and groups
+   * them by difficulty level into QuestionGroup objects.
+   *
+   * @param contents The CSV contents as a string.
+   * @return A HashMap mapping each Question.Difficulty to its corresponding QuestionGroup.
+   * @throws IOException If an error occurs while reading the CSV contents.
    */
-  public static @NotNull HashMap<Question.Difficulty, QuestionGroup> generateFromFile(
-      @NotNull File file) throws FileNotFoundException, IllegalArgumentException {
+  public static @NotNull HashMap<Question.Difficulty, QuestionGroup> generateFromCsvContents(
+      @NotNull String contents) throws IOException {
     ArrayList<Question> easyQuestions = new ArrayList<>();
     ArrayList<Question> mediumQuestions = new ArrayList<>();
     ArrayList<Question> hardQuestions = new ArrayList<>();
 
-    try (Scanner in = new Scanner(file)) {
-      while (in.hasNextLine()) {
-        // Read question properties in file
-        String title = in.nextLine().trim();
+    CsvMapper mapper = new CsvMapper();
 
+    try (MappingIterator<List<String>> it =
+        mapper
+            .readerForListOf(String.class)
+            .with(CsvParser.Feature.WRAP_AS_ARRAY)
+            .readValues(contents)) {
+
+      while (it.hasNextValue()) {
+        // Read row
+        List<String> row = it.nextValue();
+
+        // Skip if bad question
+        if (!row.get(1).equals("1")) continue;
+
+        // Determine difficulty
+        Question.Difficulty difficulty;
+        if (row.get(2).equals("1")) {
+          difficulty = EASY;
+        } else if (row.get(2).equals("2")) {
+          difficulty = MEDIUM;
+        } else {
+          difficulty = HARD;
+        }
+
+        // Get question title
+        String title = row.get(3);
+
+        // Get question choices
         HashMap<Question.Choice, String> choices = new HashMap<>();
-        choices.put(Question.Choice.A, in.nextLine().trim());
-        choices.put(Question.Choice.B, in.nextLine().trim());
-        choices.put(Question.Choice.C, in.nextLine().trim());
-        choices.put(Question.Choice.D, in.nextLine().trim());
+        choices.put(Question.Choice.A, row.get(4));
+        choices.put(Question.Choice.B, row.get(5));
+        choices.put(Question.Choice.C, row.get(6));
+        choices.put(Question.Choice.D, row.get(7));
 
-        // TODO - Handle parsing errors
-        String crctChoice = in.nextLine().substring(4).trim().toUpperCase();
-        Question.Choice correctChoice = Question.Choice.valueOf(crctChoice);
-        String dif = in.nextLine().substring(11).trim().toUpperCase();
-        Question.Difficulty difficulty = Question.Difficulty.valueOf(dif);
+        // Get the correct choice
+        int crctChoice = Integer.parseInt(row.get(8));
+        Question.Choice correctChoice = Question.Choice.fromInt(crctChoice);
 
         Question question = new Question(title, choices, correctChoice, difficulty);
 
-        // Sort question correctly
+        // Assign the question to the right array list
         switch (difficulty) {
           case EASY:
             easyQuestions.add(question);
@@ -87,16 +125,13 @@ public class QuestionGroup {
             hardQuestions.add(question);
             break;
         }
-
-        in.nextLine();
       }
     }
 
     // Assign groups to HashMap
     HashMap<Question.Difficulty, QuestionGroup> groups = new HashMap<>();
 
-    groups.put(
-        Question.Difficulty.EASY, new QuestionGroup(easyQuestions, Question.Difficulty.EASY));
+    groups.put(EASY, new QuestionGroup(easyQuestions, EASY));
     groups.put(
         Question.Difficulty.MEDIUM, new QuestionGroup(mediumQuestions, Question.Difficulty.MEDIUM));
     groups.put(
