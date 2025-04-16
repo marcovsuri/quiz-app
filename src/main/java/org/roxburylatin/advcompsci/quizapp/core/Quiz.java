@@ -39,21 +39,6 @@ public class Quiz {
   }
 
     /**
-     * Load a quiz from a file questions, answer choices, difficulty, and correct answers are stored
-     * (same loading strategy as {@link QuestionGroup#generateFromFile(File)}
-     *
-     * @param file file
-     * @return new quiz
-     * @throws FileNotFoundException if the file cannot be read
-     */
-    public static @NotNull Quiz fromFile(@NotNull File file) throws FileNotFoundException {
-        // Generate the question groups from the file
-        HashMap<Question.Difficulty, QuestionGroup> questionGroups =
-                QuestionGroup.generateFromFile(file);
-        return new Quiz(questionGroups);
-    }
-
-    /**
      * Get the quiz progress
      *
      * @return quiz progress
