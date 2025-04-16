@@ -5,12 +5,13 @@
 <?import javafx.scene.layout.VBox?>
 <VBox fx:id="root"
       alignment="CENTER"
-      spacing="30"
+      spacing="20"
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       stylesheets="@end-view.css"
       prefWidth="600"
-      prefHeight="400">
+      prefHeight="400"
+      fx:controller="org.roxburylatin.advcompsci.quizapp.application.student.EndViewController">
 
     <Label fx:id="titleLabel"
            text="Congratulations!"
@@ -18,5 +19,10 @@
 
     <Button fx:id="scoreButton"
             text="Get your score now!"
-            styleClass="score-button"/>
+            styleClass="score-button"
+            onAction="#handleGetScore"
+    />
+
+    <Label fx:id="scoreLabel"
+           styleClass="score-label"/>
 </VBox>
