@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import java.lang.String?>
 <VBox xmlns="http://javafx.com/javafx/23.0.1"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.roxburylatin.advcompsci.quizapp.application.student.LandingViewController"
@@ -24,6 +26,19 @@
         <TextField fx:id="ipField" promptText="IP Address"/>
         <TextField fx:id="portField" promptText="Port"/>
     </HBox>
+
+    <!-- Chapter Number Dropdown -->
+    <VBox spacing="5" alignment="CENTER">
+        <ComboBox fx:id="chapterComboBox" styleClass="dropdown">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Chapter 1"/>
+                    <!--                    <String fx:value="Chapter 2"/>-->
+                    <!--                    <String fx:value="Chapter 3"/>-->
+                </FXCollections>
+            </items>
+        </ComboBox>
+    </VBox>
 
     <!-- Go Button -->
     <Button fx:id="goButton"

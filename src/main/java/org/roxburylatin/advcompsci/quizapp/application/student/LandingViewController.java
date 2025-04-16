@@ -1,14 +1,12 @@
 package org.roxburylatin.advcompsci.quizapp.application.student;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.json.JSONObject;
@@ -23,6 +21,7 @@ public class LandingViewController {
   @FXML private TextField lastNameField;
   @FXML private TextField ipField;
   @FXML private TextField portField;
+  @FXML private ComboBox<String> chapterComboBox;
 
   @FXML
   private void handleStartQuiz() throws IOException {
@@ -31,9 +30,10 @@ public class LandingViewController {
     String lastName = lastNameField.getText();
     String ipAddress = ipField.getText();
     String portText = portField.getText();
+    String chapterNumVal = chapterComboBox.getValue();
 
     // Ensure all fields are occupied
-    if (firstName.isEmpty() || lastName.isEmpty() || ipAddress.isEmpty() || portText.isEmpty()) {
+    if (firstName.isEmpty() || lastName.isEmpty() || ipAddress.isEmpty() || portText.isEmpty() || chapterNumVal == null) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
 
       alert.setTitle("Error requesting quiz");
@@ -55,12 +55,24 @@ public class LandingViewController {
       return;
     }
 
+    int chapterNum;
+    try {
+      chapterNum = Integer.parseInt(chapterNumVal.replaceAll("[^0-9]", ""));
+    } catch (NumberFormatException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+
+      alert.setTitle("Error requesting quiz");
+      alert.setHeaderText("Could not determine chapter number");
+      alert.showAndWait();
+      return;
+    }
+
     // Set name globally
     StudentAppState.firstName = firstName;
     StudentAppState.lastName = lastName;
 
     // Set chapter number globally
-    StudentAppState.chapterNum = 1; // TODO - change
+    StudentAppState.chapterNum = chapterNum;
 
     // Add client
     StudentAppState.client = new Client<>(ipAddress, port);
@@ -70,7 +82,7 @@ public class LandingViewController {
 
     json.put("firstName", firstName);
     json.put("lastName", lastName);
-    json.put("chapterNum", 1); // TODO - change
+    json.put("chapterNum", chapterNum);
 
     // Get quiz
     String quizCsvContents;
