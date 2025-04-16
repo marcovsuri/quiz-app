@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
+<VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.roxburylatin.advcompsci.quizapp.application.teacher.InProgressTabController"
+      styleClass="tab-content">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <ListView fx:id="studentListView" VBox.vgrow="ALWAYS" minHeight="250.0" prefWidth="600.0" styleClass="list-view"/>
+</VBox>
