@@ -1,1 +1,26 @@
-root { -fx-background-color: linear-gradient(to bottom right, #ffe29f, #ffa99f); } .congrats-title { -fx-font-size: 32px; /* Harmonized with .title */ -fx-font-weight: bold; -fx-text-fill: #4B0082; /* Keeps the special purple to stand out */ -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 2, 2); } .score-button { -fx-font-size: 18px; /* Aligned with .go-button */ -fx-font-weight: bold; -fx-padding: 10 30; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 12; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 2); } .score-button:hover { -fx-background-color: #45A049; }
+/* Background gradient stays the same — it's nice! */
+root {
+    -fx-background-color: linear-gradient(to bottom right, #ffe29f, #ffa99f);
+}
+
+/* Title styling: match main .title but keep the celebratory vibe */
+.congrats-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333; /* Changed to match .title */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 2);
+}
+
+/* Score button styled like the main go-button */
+.score-button {
+    -fx-font-size: 18px;
+    -fx-padding: 10px 20px;
+    -fx-background-color: #ff9900;
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 2);
+}
+
+.score-button:hover {
+    -fx-background-color: #e67e22;
+}
