@@ -38,7 +38,28 @@ public class AdaptiveLoader implements QuestionLoader {
             ? QuestionLoader.increaseDifficulty(currentDifficulty)
             : QuestionLoader.decreaseDifficulty(currentDifficulty);
 
-    return questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
+    // TODO - refactor
+    Question q = questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
+    if (q == null) {
+      if (currentDifficulty == Question.Difficulty.EASY) {
+        q = questionGroups.get(Question.Difficulty.MEDIUM).getAndRemoveRandomQuestion();
+        if (q == null) {
+          q = questionGroups.get(Question.Difficulty.HARD).getAndRemoveRandomQuestion();
+        }
+      } else if (currentDifficulty == Question.Difficulty.MEDIUM) {
+        q = questionGroups.get(Question.Difficulty.EASY).getAndRemoveRandomQuestion();
+        if (q == null) {
+          q = questionGroups.get(Question.Difficulty.HARD).getAndRemoveRandomQuestion();
+        }
+      } else {
+        q = questionGroups.get(Question.Difficulty.MEDIUM).getAndRemoveRandomQuestion();
+        if (q == null) {
+          q = questionGroups.get(Question.Difficulty.EASY).getAndRemoveRandomQuestion();
+        }
+      }
+    }
+
+    return q;
   }
 
   @Override

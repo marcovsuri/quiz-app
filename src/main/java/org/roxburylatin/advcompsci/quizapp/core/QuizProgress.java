@@ -6,6 +6,7 @@ package org.roxburylatin.advcompsci.quizapp.core;
  * @see Quiz
  */
 public class QuizProgress {
+  private int numQuestionsAnswered = 0;
   private int numQuestionsAsked = 0;
   private int numQuestionsCorrect = 0;
   private boolean isLastAnswerCorrect = false;
@@ -29,6 +30,15 @@ public class QuizProgress {
   }
 
   /**
+   * Get the number of questions answered
+   *
+   * @return the number of questions answered so far in the quiz
+   */
+  public int numQuestionsAnswered() {
+    return numQuestionsAnswered;
+  }
+
+  /**
    * Get whether the last answer was correct
    *
    * @return whether the answer to the last question was correct
@@ -48,6 +58,7 @@ public class QuizProgress {
    * @param isAnswerCorrect whether the answer was correct
    */
   public void recordAnsweredQuestion(boolean isAnswerCorrect) {
+    numQuestionsAnswered++;
     isLastAnswerCorrect = isAnswerCorrect;
     if (isLastAnswerCorrect) {
       numQuestionsCorrect++;
@@ -55,6 +66,6 @@ public class QuizProgress {
   }
 
   public boolean isQuizFinished() {
-      return numQuestionsAsked == 20;
+    return numQuestionsAnswered == 20;
   }
 }

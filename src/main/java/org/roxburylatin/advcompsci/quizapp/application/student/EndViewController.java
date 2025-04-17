@@ -14,7 +14,7 @@ public class EndViewController {
   @FXML
   private void handleGetScore() {
     int correct = StudentAppState.getQuiz().getProgress().numQuestionsCorrect();
-    int total = StudentAppState.getQuiz().getProgress().numQuestionsAsked();
+    int total = StudentAppState.getQuiz().getProgress().numQuestionsAnswered();
     double percent = (double) correct / total * 100;
 
     scoreLabel.setText(String.format("You scored %d/%d (%.2f%%)", correct, total, percent));

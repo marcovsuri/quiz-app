@@ -136,7 +136,7 @@ public class QuizViewController {
     for (RadioButton button : buttons) {
       if (!button
           .getText()
-          .startsWith(StudentAppState.getCurrentQuestion().getCorrectChoice().name() + ".")) {
+          .equals(StudentAppState.getCurrentQuestion().getCorrectChoice().name() + ":")) {
         button.setDisable(true);
         removed++;
         if (removed == 2) break;
@@ -239,7 +239,7 @@ public class QuizViewController {
       json.put("chapterNum", StudentAppState.chapterNum);
       json.put(
           "numQuestionsCorrect", StudentAppState.getQuiz().getProgress().numQuestionsCorrect());
-      json.put("numQuestionsTotal", StudentAppState.getQuiz().getProgress().numQuestionsAsked());
+      json.put("numQuestionsTotal", StudentAppState.getQuiz().getProgress().numQuestionsAnswered());
 
       // Send request
       try {

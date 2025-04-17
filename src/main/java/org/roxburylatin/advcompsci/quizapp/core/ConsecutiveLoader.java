@@ -21,7 +21,9 @@ public class ConsecutiveLoader implements QuestionLoader {
    * @param quizProgress progress of the quiz
    * @param questionGroups question groups
    */
-  public ConsecutiveLoader(@NotNull QuizProgress quizProgress, @NotNull HashMap<Question.Difficulty, QuestionGroup> questionGroups) {
+  public ConsecutiveLoader(
+      @NotNull QuizProgress quizProgress,
+      @NotNull HashMap<Question.Difficulty, QuestionGroup> questionGroups) {
     this.quizProgress = quizProgress;
     this.questionGroups = questionGroups;
   }
@@ -35,7 +37,28 @@ public class ConsecutiveLoader implements QuestionLoader {
 
     numQuestionsInDifficulty++;
 
-    return questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
+    // TODO - refactor
+    Question q = questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
+    if (q == null) {
+      if (currentDifficulty == Question.Difficulty.EASY) {
+        q = questionGroups.get(Question.Difficulty.MEDIUM).getAndRemoveRandomQuestion();
+        if (q == null) {
+          q = questionGroups.get(Question.Difficulty.HARD).getAndRemoveRandomQuestion();
+        }
+      } else if (currentDifficulty == Question.Difficulty.MEDIUM) {
+        q = questionGroups.get(Question.Difficulty.EASY).getAndRemoveRandomQuestion();
+        if (q == null) {
+          q = questionGroups.get(Question.Difficulty.HARD).getAndRemoveRandomQuestion();
+        }
+      } else {
+        q = questionGroups.get(Question.Difficulty.MEDIUM).getAndRemoveRandomQuestion();
+        if (q == null) {
+          q = questionGroups.get(Question.Difficulty.EASY).getAndRemoveRandomQuestion();
+        }
+      }
+    }
+
+    return q;
   }
 
   @Override
