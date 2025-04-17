@@ -1,6 +1,8 @@
 package org.roxburylatin.advcompsci.quizapp.application.student;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -131,17 +133,27 @@ public class QuizViewController {
   @FXML
   private void handleFiftyFifty() {
     RadioButton[] buttons = {radioA, radioB, radioC, radioD};
-    int removed = 0;
+    ArrayList<RadioButton> removables = new ArrayList<>();
 
     for (RadioButton button : buttons) {
       if (!button
           .getText()
           .equals(StudentAppState.getCurrentQuestion().getCorrectChoice().name() + ":")) {
-        button.setDisable(true);
-        removed++;
-        if (removed == 2) break;
+        removables.add(button);
       }
     }
+
+    Random rand = new Random();
+
+    // Get two distinct random indices
+    int firstIndex = rand.nextInt(removables.size());
+    int secondIndex;
+    do {
+      secondIndex = rand.nextInt(removables.size());
+    } while (secondIndex == firstIndex);
+
+    removables.get(firstIndex).setDisable(true);
+    removables.get(secondIndex).setDisable(true);
 
     fiftyFiftyButton.setDisable(true);
   }
