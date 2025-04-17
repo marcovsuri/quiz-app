@@ -54,7 +54,12 @@ public class TeacherViewController {
     serverStatusText.setText(isServerRunning ? "Server Inactive" : "Server Active");
     startServerButton.setText(isServerRunning ? "Start Server" : "Stop Server");
 
-    // Server
-    AppState.server.start();
+    if (!isServerRunning) {
+      // Start Server
+      AppState.server.start();
+    } else {
+      // Stop Server
+      AppState.server.stop();
+    }
   }
 }

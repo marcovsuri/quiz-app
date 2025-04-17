@@ -1,0 +1,30 @@
+/* Background gradient stays the same — it's nice! */
+root {
+    -fx-background-color: linear-gradient(to bottom right, #ffe29f, #ffa99f);
+}
+
+.congrats-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 2);
+}
+
+.score-button {
+    -fx-font-size: 18px;
+    -fx-padding: 10px 20px;
+    -fx-background-color: #ff9900;
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 2);
+}
+
+.score-button:hover {
+    -fx-background-color: #e67e22;
+}
+
+.score-label {
+    -fx-font-size: 18px;
+    -fx-text-fill: #333;
+    -fx-font-weight: normal;
+}

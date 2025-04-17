@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<VBox fx:id="root"
+      alignment="CENTER"
+      spacing="20"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@end-view.css"
+      prefWidth="600"
+      prefHeight="400"
+      fx:controller="org.roxburylatin.advcompsci.quizapp.application.student.EndViewController">
+
+    <Label fx:id="titleLabel"
+           text="Congratulations!"
+           styleClass="congrats-title"/>
+
+    <Button fx:id="scoreButton"
+            text="Get your score now!"
+            styleClass="score-button"
+            onAction="#handleGetScore"
+    />
+
+    <Label fx:id="scoreLabel"
+           styleClass="score-label"/>
+</VBox>
