@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -110,7 +111,9 @@ public class Server<T extends Enum<T>> {
     Thread serverThread =
         new Thread(
             () -> {
-              try (ServerSocket serverSocket = new ServerSocket(port)) {
+              try (ServerSocket serverSocket = new ServerSocket()) {
+                serverSocket.bind(
+                    new InetSocketAddress("0.0.0.0", port)); // Allow external connections
                 System.out.println("Teacher server started on port " + port);
 
                 this.serverSocket = serverSocket;
@@ -123,6 +126,19 @@ public class Server<T extends Enum<T>> {
                       PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
                     // Handle the client request based on the request type
                     try {
+                      String clientIp = clientSocket.getInetAddress().getHostAddress();
+                      System.out.println("Incoming connection from: " + clientIp);
+
+                      // Accept only local (private) IP ranges
+                      if (!(clientIp.startsWith("192.168.")
+                          || clientIp.startsWith("10.")
+                          || clientIp.startsWith("172."))) {
+                        System.out.println(
+                            "Rejected connection from non-local network: " + clientIp);
+                        clientSocket.close();
+                        continue; // back to waiting
+                      }
+
                       // Ensure request has lines
                       String line1 = in.readLine();
                       String line2 = in.readLine();

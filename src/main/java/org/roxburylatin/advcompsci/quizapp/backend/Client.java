@@ -53,16 +53,23 @@ public class Client<T extends Enum<T>> {
       BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
       String responseStatus = in.readLine();
-      if (responseStatus.equals("ERROR")) {
-        throw new ServerException(in.readLine());
+      if (responseStatus == null) {
+        throw new ServerException("Server closed connection unexpectedly (no status line).");
       }
 
-      // Read the response
+      if (responseStatus.equals("ERROR")) {
+        String errorMessage = in.readLine();
+        if (errorMessage == null) {
+          throw new ServerException("Server reported error but gave no message.");
+        }
+        throw new ServerException(errorMessage);
+      }
+
+      // Otherwise read full response
       StringBuilder response = new StringBuilder();
       String line;
       while ((line = in.readLine()) != null) {
-        response.append(line);
-        response.append('\n');
+        response.append(line).append('\n');
       }
 
       return response.toString();
