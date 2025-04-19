@@ -1,25 +1,43 @@
 package org.roxburylatin.advcompsci.quizapp.application.teacher;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
+import java.util.Collections;
+import java.util.Enumeration;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class TeacherViewController {
-  @FXML private TabPane tabPane;
   @FXML private Button startServerButton;
   @FXML private Text serverStatusText;
   @FXML private VBox requestsTab;
   @FXML private VBox inProgressTab;
   @FXML private VBox completedTab;
   @FXML private TextField portField;
+  @FXML private Text ipDisplay;
+
+  private static String getLocalIpAddress() {
+    try {
+      Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+      for (NetworkInterface ni : Collections.list(interfaces)) {
+        if (ni.isLoopback() || !ni.isUp()) continue;
+
+        for (InetAddress addr : Collections.list(ni.getInetAddresses())) {
+          if (addr instanceof Inet4Address && !addr.isLoopbackAddress()) {
+            return addr.getHostAddress();
+          }
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return "Unknown";
+  }
 
   @FXML
   public void initialize() {
@@ -41,6 +59,9 @@ public class TeacherViewController {
 
       // Set up server button action
       startServerButton.setOnAction(event -> handleServerButton());
+
+      // Show IP address
+      ipDisplay.setText(getLocalIpAddress());
     } catch (IOException e) {
       e.printStackTrace();
     }

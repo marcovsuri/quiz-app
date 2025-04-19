@@ -16,8 +16,8 @@
             </padding>
             <Text text="Quiz App (Teacher)" styleClass="title"/>
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <Text text="IP:" style="-fx-font-weight: bold;"/>
-                <Text text="127.0.0.1" style="-fx-font-size: 1.2em; -fx-font-weight: bold;"/>
+                <Text text="Local IP:" style="-fx-font-weight: bold;"/>
+                <Text fx:id="ipDisplay" text="127.0.0.1" style="-fx-font-size: 1.2em; -fx-font-weight: bold;"/>
                 <Text text="PORT:" style="-fx-font-weight: bold;"/>
                 <TextField fx:id="portField" text="3000" promptText="Port #" prefWidth="80"/>
                 <Region HBox.hgrow="ALWAYS"/>
