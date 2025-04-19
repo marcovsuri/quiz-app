@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.jetbrains.annotations.NotNull;
@@ -23,10 +22,10 @@ import org.json.JSONObject;
 public class Server<T extends Enum<T>> {
   private final @NotNull HashMap<T, RequestHandler> requestHandlerMap = new HashMap<>();
   private final @NotNull HashMap<T, Boolean> requestIOMap = new HashMap<>();
-  private final int port;
   private final @NotNull Lock runningLock;
   private final @NotNull Lock fileLock;
   private final @NotNull Class<T> requestClass;
+  private int port;
   private boolean running;
   private ServerSocket serverSocket;
 
@@ -36,12 +35,21 @@ public class Server<T extends Enum<T>> {
    * @param port The port number on which the server will listen for client connections
    * @param requestClass The class of the enum type representing different request types
    */
-  public Server(int port, @NotNull Class<T> requestClass, Lock IOLock) {
+  public Server(int port, @NotNull Class<T> requestClass, @NotNull Lock IOLock) {
     this.port = port;
     running = false;
     runningLock = new ReentrantLock();
     fileLock = IOLock;
     this.requestClass = requestClass;
+  }
+
+  /**
+   * Set the port on which to run the server
+   *
+   * @param port new port number
+   */
+  public void setPort(int port) {
+    this.port = port;
   }
 
   /**
@@ -96,6 +104,9 @@ public class Server<T extends Enum<T>> {
     // Update the running state if not already running
     setRunning(true);
 
+    // Prevent race condition errors
+    int port = this.port;
+
     Thread serverThread =
         new Thread(
             () -> {
@@ -110,13 +121,20 @@ public class Server<T extends Enum<T>> {
                       BufferedReader in =
                           new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                       PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
-                    // Parse the client request
-                    T requestType = Enum.valueOf(requestClass, in.readLine());
-                    String jsonString = in.readLine();
-                    JSONObject json = new JSONObject(jsonString);
-
                     // Handle the client request based on the request type
                     try {
+                      // Ensure request has lines
+                      String line1 = in.readLine();
+                      String line2 = in.readLine();
+
+                      if (line1 == null || line2 == null) {
+                        throw new ServerException("The input must contain at least two lines.");
+                      }
+
+                      // Parse the client request
+                      T requestType = Enum.valueOf(requestClass, line1);
+                      JSONObject json = new JSONObject(line2);
+
                       // Check if the request type requires I/O operations
                       boolean usesIO = requestIOMap.get(requestType);
 

@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.*?>
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.roxburylatin.advcompsci.quizapp.application.teacher.TeacherViewController"
             prefWidth="800" prefHeight="500">
@@ -14,10 +14,12 @@
             <padding>
                 <Insets top="15" right="15" bottom="15" left="15"/>
             </padding>
-            <Text text="Quiz App (Teacher)" styleClass="title"></Text>
+            <Text text="Quiz App (Teacher)" styleClass="title"/>
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <Text text="CODE:"/>
-                <Text text="127.0.0.1 (3000)" style="-fx-font-weight: bold;"/>
+                <Text text="IP:" style="-fx-font-weight: bold;"/>
+                <Text text="127.0.0.1" style="-fx-font-size: 1.2em; -fx-font-weight: bold;"/>
+                <Text text="PORT:" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="portField" text="3000" promptText="Port #" prefWidth="80"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Button text="Start Server" fx:id="startServerButton" styleClass="start-server"/>
                 <Text text="Server Inactive" fx:id="serverStatusText"/>
