@@ -1,0 +1,53 @@
+/*.answer:after, .correct:after {
+    content: "Answer";
+    background: #CCFFCC;
+    margin-left: 1em;
+    font-family: sans;
+    font-size: 0.8em;
+    padding: 0.2em;
+}*/
+
+ol ol {
+    list-style: upper-alpha;
+}
+
+.pseudo {
+    font-family: "Comic Sans MS";
+    color: red;
+}
+
+dl {
+    margin: 1em;
+    font-family: sans;
+    font-size: 0.8em;
+}
+
+dt{
+  display: inline-block;
+  min-width: 12em;
+  margin-right: 1em;
+  font-weight: bold;
+}
+
+dd {
+  display: inline;
+  margin: 0;
+}
+
+dd:after{
+display: block;
+content: '';
+}
+
+pre {
+   color: darkblue;
+}
+
+code {
+    color: brown;
+}
+
+/* Custom Styles */
+li {
+    list-style: none;
+}

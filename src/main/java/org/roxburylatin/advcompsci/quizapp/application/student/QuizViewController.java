@@ -55,6 +55,13 @@ public class QuizViewController {
               loadView(StudentAppState.getCurrentQuestion());
             });
 
+    // Load styles in webviews
+    questionView.getEngine().setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
+    webViewA.getEngine().setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
+    webViewB.getEngine().setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
+    webViewC.getEngine().setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
+    webViewD.getEngine().setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
+
     // Load the initial question
     loadView(StudentAppState.getCurrentQuestion());
 
@@ -97,8 +104,7 @@ public class QuizViewController {
       questionScrollPane.setHvalue(0.0);
 
       // Set the question text
-      WebEngine questionViewEngine = questionView.getEngine();
-      questionViewEngine.loadContent("<h1>" + question.getTitle() + "</h1>");
+      questionView.getEngine().loadContent(question.getTitle());
 
       // Set the choices
       webViewA.getEngine().loadContent(question.getChoice(Question.Choice.A));
