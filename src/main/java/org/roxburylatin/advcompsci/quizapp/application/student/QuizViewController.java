@@ -2,11 +2,13 @@ package org.roxburylatin.advcompsci.quizapp.application.student;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -18,37 +20,19 @@ import org.roxburylatin.advcompsci.quizapp.core.Question;
 public class QuizViewController {
   @FXML private Button fiftyFiftyButton;
   @FXML private Button askTeacherButton;
-//  @FXML private Button anotherOneButton;
+  //  @FXML private Button anotherOneButton;
   @FXML private Button submitButton;
 
   @FXML private WebView questionView;
 
-  @FXML private RadioButton radioA;
+  @FXML private WebView choicesView;
 
-  @FXML private RadioButton radioB;
-
-  @FXML private RadioButton radioC;
-
-  @FXML private RadioButton radioD;
-
-  @FXML private WebView webViewA;
-  @FXML private WebView webViewB;
-  @FXML private WebView webViewC;
-  @FXML private WebView webViewD;
-
-  @FXML private ScrollPane questionScrollPane;
   @FXML private Text questionNumDisplay;
 
   @FXML private Text title;
 
   @FXML
   public void initialize() {
-    ToggleGroup answerToggleGroup = new ToggleGroup();
-    radioA.setToggleGroup(answerToggleGroup);
-    radioB.setToggleGroup(answerToggleGroup);
-    radioC.setToggleGroup(answerToggleGroup);
-    radioD.setToggleGroup(answerToggleGroup);
-
     // Listen for changes in the current question
     AppState.needsUpdateProperty()
         .addListener(
@@ -60,16 +44,7 @@ public class QuizViewController {
     questionView
         .getEngine()
         .setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
-    webViewA
-        .getEngine()
-        .setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
-    webViewB
-        .getEngine()
-        .setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
-    webViewC
-        .getEngine()
-        .setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
-    webViewD
+    choicesView
         .getEngine()
         .setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
 
@@ -77,88 +52,99 @@ public class QuizViewController {
     loadView(AppState.getCurrentQuestion());
 
     // Disable Another One Button (TODO implementation)
-//    anotherOneButton.setDisable(true);
+    //    anotherOneButton.setDisable(true);
   }
 
   private void loadView(Question question) {
     if (question != null) {
-      radioA.setVisible(true);
-      radioB.setVisible(true);
-      radioC.setVisible(true);
-      radioD.setVisible(true);
-
       fiftyFiftyButton.setVisible(true);
       askTeacherButton.setVisible(true);
-//      anotherOneButton.setVisible(true);
       submitButton.setVisible(true);
-
-      // Reset button states
-      radioA.setDisable(false);
-      radioB.setDisable(false);
-      radioC.setDisable(false);
-      radioD.setDisable(false);
-
-      // Unselect all radio buttons
-      radioA.setSelected(false);
-      radioB.setSelected(false);
-      radioC.setSelected(false);
-      radioD.setSelected(false);
-
-      // Reset helper buttons
-      fiftyFiftyButton.setDisable(false);
-      askTeacherButton.setDisable(false);
-
       questionView.setVisible(true);
-      questionScrollPane.setVisible(true);
-
-      questionScrollPane.setVvalue(0.0);
-      questionScrollPane.setHvalue(0.0);
+      choicesView.setVisible(true);
 
       // Set the question text
       questionView.getEngine().loadContent(question.getTitle());
 
       // Set the choices
-      webViewA.getEngine().loadContent(question.getChoice(Question.Choice.A));
-      webViewB.getEngine().loadContent(question.getChoice(Question.Choice.B));
-      webViewC.getEngine().loadContent(question.getChoice(Question.Choice.C));
-      webViewD.getEngine().loadContent(question.getChoice(Question.Choice.D));
+      choicesView.getEngine().loadContent(generateChoicesContent(question));
 
+      // Set the choices
       questionNumDisplay.setText(
           "Question " + AppState.getQuiz().getProgress().numQuestionsAsked() + "/20");
 
-      title.setText("Quiz App (" + AppState.firstName + " " + AppState.lastName + ", " + AppState.chapterNum + ")");
+      title.setText(
+          "Quiz App ("
+              + AppState.firstName
+              + " "
+              + AppState.lastName
+              + ", "
+              + AppState.chapterNum
+              + ")");
 
     } else {
-      //            // Reset button states
-      //            radioA.setVisible(false);
-      //            radioB.setVisible(false);
-      //            radioC.setVisible(false);
-      //            radioD.setVisible(false);
-
-      questionScrollPane.setVisible(false);
-
       // Reset helper buttons
       fiftyFiftyButton.setVisible(false);
       askTeacherButton.setVisible(false);
-//      anotherOneButton.setVisible(false);
 
       submitButton.setVisible(false);
 
       questionView.setVisible(false);
+      choicesView.setVisible(false);
       questionNumDisplay.setText("Loading...");
 
-      title.setText("Quiz App (" + AppState.firstName + " " + AppState.lastName + ", " + AppState.chapterNum + ")");
+      title.setText(
+          "Quiz App ("
+              + AppState.firstName
+              + " "
+              + AppState.lastName
+              + ", "
+              + AppState.chapterNum
+              + ")");
     }
+  }
+
+  private String generateChoicesContent(Question currentQuestion) {
+    StringBuilder html = new StringBuilder();
+
+    html.append("<!DOCTYPE html>");
+    html.append("<html><head></head><body>");
+
+    // Add the prompt
+    html.append("<form id='quizForm'>");
+
+    // Render the choices
+    List<Question.Choice> choices =
+        List.of(Question.Choice.A, Question.Choice.B, Question.Choice.C, Question.Choice.D);
+
+    for (Question.Choice choice : choices) {
+      String choiceText = currentQuestion.getChoice(choice);
+
+      html.append("<div class='choice'>")
+          .append("<input type='radio' name='answer' value='")
+          .append(choice)
+          .append("'>")
+          .append("<strong class='choiceLabel'>")
+          .append(choice)
+          .append(". </strong>")
+          .append(choiceText)
+          .append("</div>");
+    }
+
+    html.append("</form></body></html>");
+    return html.toString();
   }
 
   @FXML
   private void handleFiftyFifty() {
-    RadioButton[] buttons = {radioA, radioB, radioC, radioD};
-    ArrayList<RadioButton> removables = new ArrayList<>();
+    Question.Choice[] choices = {
+      Question.Choice.A, Question.Choice.B, Question.Choice.C, Question.Choice.D
+    };
+    ArrayList<Question.Choice> removables = new ArrayList<>();
 
-    for (RadioButton button : buttons) {
-      if (!button.getText().equals(AppState.getCurrentQuestion().getCorrectChoice().name() + ":")) {
-        removables.add(button);
+    for (Question.Choice choice : choices) {
+      if (!choice.equals(AppState.getCurrentQuestion().getCorrectChoice())) {
+        removables.add(choice);
       }
     }
 
@@ -171,8 +157,21 @@ public class QuizViewController {
       secondIndex = rand.nextInt(removables.size());
     } while (secondIndex == firstIndex);
 
-    removables.get(firstIndex).setDisable(true);
-    removables.get(secondIndex).setDisable(true);
+    choicesView
+        .getEngine()
+        .executeScript(
+            "var btn = document.querySelector('input[name=\"answer\"][value=\""
+                + removables.get(firstIndex).toString()
+                + "\"]');"
+                + "if (btn) { btn.checked = false; btn.disabled = true; }");
+
+    choicesView
+        .getEngine()
+        .executeScript(
+            "var btn = document.querySelector('input[name=\"answer\"][value=\""
+                + removables.get(secondIndex).toString()
+                + "\"]');"
+                + "if (btn) { btn.checked = false; btn.disabled = true; }");
 
     fiftyFiftyButton.setDisable(true);
   }
@@ -219,19 +218,27 @@ public class QuizViewController {
       alert.showAndWait();
     }
 
-    // Get the selected answer
-    Question.Choice selectedAnswer = null;
-    if (radioA.isSelected()) {
-      selectedAnswer = Question.Choice.A;
-    } else if (radioB.isSelected()) {
-      selectedAnswer = Question.Choice.B;
-    } else if (radioC.isSelected()) {
-      selectedAnswer = Question.Choice.C;
-    } else if (radioD.isSelected()) {
-      selectedAnswer = Question.Choice.D;
+    // Get the selected choice
+    Object selectedValue =
+        choicesView
+            .getEngine()
+            .executeScript(
+                "(() => {"
+                    + "   const checked = document.querySelector('input[name=\"answer\"]:checked');"
+                    + "   return checked ? checked.value : null;"
+                    + "})()");
+
+    Question.Choice selectedChoice;
+    switch ((String) selectedValue) {
+      case null -> selectedChoice = null;
+      case "A" -> selectedChoice = Question.Choice.A;
+      case "B" -> selectedChoice = Question.Choice.B;
+      case "C" -> selectedChoice = Question.Choice.C;
+      case "D" -> selectedChoice = Question.Choice.D;
+      default -> selectedChoice = null;
     }
 
-    if (selectedAnswer == null) {
+    if (selectedChoice == null) {
       // Show an alert if no answer is selected
       Alert alert = new Alert(Alert.AlertType.WARNING);
       alert.setTitle("No Answer Selected");
@@ -242,7 +249,7 @@ public class QuizViewController {
     }
 
     // Submit answer
-    AppState.submitAnswer(selectedAnswer);
+    AppState.submitAnswer(selectedChoice);
 
     if (AppState.getQuiz().getProgress().isQuizFinished()) {
       // Quiz is finished

@@ -110,6 +110,11 @@ public class Question {
       }
       throw new IllegalArgumentException("No enum constant with value " + value);
     }
+
+    @Override
+    public String toString() {
+      return name();
+    }
   }
 
   /** Quiz question difficulties */
