@@ -33,7 +33,11 @@ public class LandingViewController {
     String chapterNumVal = chapterComboBox.getValue();
 
     // Ensure all fields are occupied
-    if (firstName.isEmpty() || lastName.isEmpty() || ipAddress.isEmpty() || portText.isEmpty() || chapterNumVal == null) {
+    if (firstName.isEmpty()
+        || lastName.isEmpty()
+        || ipAddress.isEmpty()
+        || portText.isEmpty()
+        || chapterNumVal == null) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
 
       alert.setTitle("Error requesting quiz");
@@ -68,14 +72,14 @@ public class LandingViewController {
     }
 
     // Set name globally
-    StudentAppState.firstName = firstName;
-    StudentAppState.lastName = lastName;
+    AppState.firstName = firstName;
+    AppState.lastName = lastName;
 
     // Set chapter number globally
-    StudentAppState.chapterNum = chapterNum;
+    AppState.chapterNum = chapterNum;
 
     // Add client
-    StudentAppState.client = new Client<>(ipAddress, port);
+    AppState.client = new Client<>(ipAddress, port);
 
     // Add JSON parameters for requesting quizzes
     JSONObject json = new JSONObject();
@@ -87,7 +91,7 @@ public class LandingViewController {
     // Get quiz
     String quizCsvContents;
     try {
-      quizCsvContents = StudentAppState.client.send(Request.REQUEST_QUIZ, json);
+      quizCsvContents = AppState.client.send(Request.REQUEST_QUIZ, json);
     } catch (ServerException e) {
       System.out.println(e.getMessage());
       Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -111,7 +115,7 @@ public class LandingViewController {
     }
 
     // Set Quiz
-    StudentAppState.setQuiz(quiz);
+    AppState.setQuiz(quiz);
 
     // Get the current stage
     Stage stage = (Stage) goButton.getScene().getWindow();

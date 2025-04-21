@@ -25,8 +25,7 @@ public class CompletedTabController {
   }
 
   private void updateStudentList() {
-    studentListView.setItems(
-        AppState.getStudentsByProgress(Student.Progress.COMPLETED));
+    studentListView.setItems(AppState.getStudentsByProgress(Student.Progress.COMPLETED));
   }
 
   private void handleClear() {

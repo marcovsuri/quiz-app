@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
-import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import org.json.JSONObject;
@@ -49,21 +48,31 @@ public class QuizViewController {
     radioD.setToggleGroup(answerToggleGroup);
 
     // Listen for changes in the current question
-    StudentAppState.needsUpdateProperty()
+    AppState.needsUpdateProperty()
         .addListener(
             (_, _, newValue) -> {
-              loadView(StudentAppState.getCurrentQuestion());
+              loadView(AppState.getCurrentQuestion());
             });
 
     // Load styles in webviews
-    questionView.getEngine().setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
-    webViewA.getEngine().setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
-    webViewB.getEngine().setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
-    webViewC.getEngine().setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
-    webViewD.getEngine().setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
+    questionView
+        .getEngine()
+        .setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
+    webViewA
+        .getEngine()
+        .setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
+    webViewB
+        .getEngine()
+        .setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
+    webViewC
+        .getEngine()
+        .setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
+    webViewD
+        .getEngine()
+        .setUserStyleSheetLocation(getClass().getResource("embedded-styles.css").toString());
 
     // Load the initial question
-    loadView(StudentAppState.getCurrentQuestion());
+    loadView(AppState.getCurrentQuestion());
 
     // Disable Another One Button (TODO implementation)
     anotherOneButton.setDisable(true);
@@ -113,7 +122,7 @@ public class QuizViewController {
       webViewD.getEngine().loadContent(question.getChoice(Question.Choice.D));
 
       questionNumDisplay.setText(
-          "Question " + StudentAppState.getQuiz().getProgress().numQuestionsAsked() + "/20");
+          "Question " + AppState.getQuiz().getProgress().numQuestionsAsked() + "/20");
 
     } else {
       //            // Reset button states
@@ -142,9 +151,7 @@ public class QuizViewController {
     ArrayList<RadioButton> removables = new ArrayList<>();
 
     for (RadioButton button : buttons) {
-      if (!button
-          .getText()
-          .equals(StudentAppState.getCurrentQuestion().getCorrectChoice().name() + ":")) {
+      if (!button.getText().equals(AppState.getCurrentQuestion().getCorrectChoice().name() + ":")) {
         removables.add(button);
       }
     }
@@ -166,9 +173,7 @@ public class QuizViewController {
 
   @FXML
   private void handleAskTeacher() {
-    if (StudentAppState.client == null
-        || StudentAppState.firstName == null
-        || StudentAppState.lastName == null) {
+    if (AppState.client == null || AppState.firstName == null || AppState.lastName == null) {
       // Should never happen...
       Alert alert = new Alert(Alert.AlertType.ERROR);
 
@@ -179,12 +184,12 @@ public class QuizViewController {
 
     // Add properties to JSON object
     JSONObject json = new JSONObject();
-    json.put("firstName", StudentAppState.firstName);
-    json.put("lastName", StudentAppState.lastName);
+    json.put("firstName", AppState.firstName);
+    json.put("lastName", AppState.lastName);
 
     // Send request
     try {
-      StudentAppState.client.send(Request.ASK_FOR_HELP, json);
+      AppState.client.send(Request.ASK_FOR_HELP, json);
 
       // Disable after asking successfully
       askTeacherButton.setDisable(true);
@@ -199,7 +204,7 @@ public class QuizViewController {
 
   @FXML
   private void handleSubmit() {
-    if (StudentAppState.quizSubmitted) {
+    if (AppState.quizSubmitted) {
       // Occurs if loading end screen does not work and user is still able to click submit button
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Cannot submit");
@@ -231,16 +236,16 @@ public class QuizViewController {
     }
 
     // Submit answer
-    StudentAppState.submitAnswer(selectedAnswer);
+    AppState.submitAnswer(selectedAnswer);
 
-    if (StudentAppState.getQuiz().getProgress().isQuizFinished()) {
+    if (AppState.getQuiz().getProgress().isQuizFinished()) {
       // Quiz is finished
 
       // Submit Quiz
-      if (StudentAppState.client == null
-          || StudentAppState.firstName == null
-          || StudentAppState.lastName == null
-          || StudentAppState.chapterNum == null) {
+      if (AppState.client == null
+          || AppState.firstName == null
+          || AppState.lastName == null
+          || AppState.chapterNum == null) {
         // Should never happen...
         Alert alert = new Alert(Alert.AlertType.ERROR);
 
@@ -252,16 +257,15 @@ public class QuizViewController {
 
       // Add properties to JSON object
       JSONObject json = new JSONObject();
-      json.put("firstName", StudentAppState.firstName);
-      json.put("lastName", StudentAppState.lastName);
-      json.put("chapterNum", StudentAppState.chapterNum);
-      json.put(
-          "numQuestionsCorrect", StudentAppState.getQuiz().getProgress().numQuestionsCorrect());
-      json.put("numQuestionsTotal", StudentAppState.getQuiz().getProgress().numQuestionsAnswered());
+      json.put("firstName", AppState.firstName);
+      json.put("lastName", AppState.lastName);
+      json.put("chapterNum", AppState.chapterNum);
+      json.put("numQuestionsCorrect", AppState.getQuiz().getProgress().numQuestionsCorrect());
+      json.put("numQuestionsTotal", AppState.getQuiz().getProgress().numQuestionsAnswered());
 
       // Send request
       try {
-        StudentAppState.client.send(Request.SUBMIT_QUIZ, json);
+        AppState.client.send(Request.SUBMIT_QUIZ, json);
 
         // Disable after asking successfully
         askTeacherButton.setDisable(true);

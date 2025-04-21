@@ -10,9 +10,12 @@ module org.roxburylatin.advcompsci.quizapp {
   requires org.json;
 
   exports org.roxburylatin.advcompsci.quizapp.application.student;
-  opens org.roxburylatin.advcompsci.quizapp.application.student to javafx.fxml;
+
+  opens org.roxburylatin.advcompsci.quizapp.application.student to
+      javafx.fxml;
 
   exports org.roxburylatin.advcompsci.quizapp.application.teacher;
+
   opens org.roxburylatin.advcompsci.quizapp.application.teacher to
       javafx.fxml;
 

@@ -28,8 +28,7 @@ public class RequestsTabController {
   }
 
   private void updateStudentList() {
-    studentListView.setItems(
-        AppState.getStudentsByProgress(Student.Progress.REQUESTED));
+    studentListView.setItems(AppState.getStudentsByProgress(Student.Progress.REQUESTED));
   }
 
   private void handleAccept() {
