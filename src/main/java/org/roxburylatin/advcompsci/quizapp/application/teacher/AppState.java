@@ -24,21 +24,6 @@ public class AppState {
   static Server<Request> server;
 
   static {
-    // TODO - remove (TESTING ONLY)
-    Student student1 = new Student("Michael", "DiLallo");
-    student1.setProgress(Progress.COMPLETED);
-    allStudents.add(student1);
-
-    Student student2 = new Student("Avish", "Kumar");
-    student2.setProgress(Progress.IN_PROGRESS);
-    allStudents.add(student2);
-
-    Student student3 = new Student("Marco", "Suri");
-    student3.setProgress(Progress.REQUESTED);
-    allStudents.add(student3);
-  }
-
-  static {
     // Server Initiation
     server = new Server<Request>(3000, Request.class, IOLock);
     server.registerHandler(
@@ -49,12 +34,13 @@ public class AppState {
 
           String firstName = data.getString("firstName");
           String lastName = data.getString("lastName");
+          int chapterNum = data.getInt("chapterNum");
 
           // Add student
           // Ensure UI changes happen on the right thread
           Platform.runLater(
               () -> {
-                Student student = new Student(firstName, lastName);
+                Student student = new Student(firstName, lastName, chapterNum);
                 student.setProgress(Progress.IN_PROGRESS);
                 try {
                   addStudent(student);
@@ -72,8 +58,6 @@ public class AppState {
                   alert.showAndWait();
                 }
               });
-
-          int chapterNum = data.getInt("chapterNum");
 
           StringBuilder csvContentBuilder = new StringBuilder();
 

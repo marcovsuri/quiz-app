@@ -6,11 +6,13 @@ public class Student {
   private final StringProperty firstName = new SimpleStringProperty();
   private final StringProperty lastName = new SimpleStringProperty();
   private final ObjectProperty<Progress> progress = new SimpleObjectProperty<>();
+  private final int chapterNum;
 
-  public Student(String firstName, String lastName) {
+  public Student(String firstName, String lastName, int chapterNum) {
     this.firstName.set(firstName);
     this.lastName.set(lastName);
     this.progress.set(Progress.REQUESTED);
+    this.chapterNum = chapterNum;
   }
 
   public Progress getProgress() {
@@ -31,7 +33,7 @@ public class Student {
 
   @Override
   public String toString() {
-    return firstName.get() + " " + lastName.get();
+    return firstName.get() + " " + lastName.get() + " (" + chapterNum + ")";
   }
 
   public enum Progress {

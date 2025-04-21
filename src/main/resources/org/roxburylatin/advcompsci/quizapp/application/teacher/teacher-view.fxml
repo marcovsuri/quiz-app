@@ -30,7 +30,7 @@
     <!-- Center Tabs -->
     <center>
         <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
-            <Tab text="Requests">
+            <Tab text="Requests" disable="true">
                 <content>
                     <VBox fx:id="requestsTab" styleClass="tab-content"/>
                 </content>
