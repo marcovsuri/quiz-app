@@ -16,7 +16,7 @@
             <padding>
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
-            <Text text="Quiz App (Student)" styleClass="app-title"/>
+            <Text fx:id="title" text="Quiz App" styleClass="app-title"/>
             <Text fx:id="questionNumDisplay" text="Question 1/20" styleClass="question-number"/>
         </VBox>
     </top>
@@ -32,7 +32,7 @@
             <HBox spacing="30" alignment="CENTER">
                 <Button fx:id="fiftyFiftyButton" text="50/50" onAction="#handleFiftyFifty"
                         styleClass="lifeline-button"/>
-                <Button fx:id="anotherOneButton" text="Another One" styleClass="lifeline-button"/>
+<!--                <Button fx:id="anotherOneButton" text="Another One" styleClass="lifeline-button"/>-->
                 <Button fx:id="askTeacherButton" text="Ask Teacher" onAction="#handleAskTeacher"
                         styleClass="lifeline-button"/>
             </HBox>

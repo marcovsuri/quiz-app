@@ -18,7 +18,7 @@ import org.roxburylatin.advcompsci.quizapp.core.Question;
 public class QuizViewController {
   @FXML private Button fiftyFiftyButton;
   @FXML private Button askTeacherButton;
-  @FXML private Button anotherOneButton;
+//  @FXML private Button anotherOneButton;
   @FXML private Button submitButton;
 
   @FXML private WebView questionView;
@@ -38,6 +38,8 @@ public class QuizViewController {
 
   @FXML private ScrollPane questionScrollPane;
   @FXML private Text questionNumDisplay;
+
+  @FXML private Text title;
 
   @FXML
   public void initialize() {
@@ -75,7 +77,7 @@ public class QuizViewController {
     loadView(AppState.getCurrentQuestion());
 
     // Disable Another One Button (TODO implementation)
-    anotherOneButton.setDisable(true);
+//    anotherOneButton.setDisable(true);
   }
 
   private void loadView(Question question) {
@@ -87,7 +89,7 @@ public class QuizViewController {
 
       fiftyFiftyButton.setVisible(true);
       askTeacherButton.setVisible(true);
-      anotherOneButton.setVisible(true);
+//      anotherOneButton.setVisible(true);
       submitButton.setVisible(true);
 
       // Reset button states
@@ -124,6 +126,8 @@ public class QuizViewController {
       questionNumDisplay.setText(
           "Question " + AppState.getQuiz().getProgress().numQuestionsAsked() + "/20");
 
+      title.setText("Quiz App (" + AppState.firstName + " " + AppState.lastName + ", " + AppState.chapterNum + ")");
+
     } else {
       //            // Reset button states
       //            radioA.setVisible(false);
@@ -136,12 +140,14 @@ public class QuizViewController {
       // Reset helper buttons
       fiftyFiftyButton.setVisible(false);
       askTeacherButton.setVisible(false);
-      anotherOneButton.setVisible(false);
+//      anotherOneButton.setVisible(false);
 
       submitButton.setVisible(false);
 
       questionView.setVisible(false);
       questionNumDisplay.setText("Loading...");
+
+      title.setText("Quiz App (" + AppState.firstName + " " + AppState.lastName + ", " + AppState.chapterNum + ")");
     }
   }
 
