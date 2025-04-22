@@ -35,7 +35,36 @@ public class ConsecutiveLoader implements QuestionLoader {
 
     numQuestionsInDifficulty++;
 
-    return questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
+    Question newQuestion = questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
+    if (newQuestion == null) {
+      switch (currentDifficulty) {
+        case EASY -> {
+          currentDifficulty = QuestionLoader.increaseDifficulty(currentDifficulty);
+          newQuestion = questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
+          if (newQuestion == null) {
+            currentDifficulty = QuestionLoader.increaseDifficulty(currentDifficulty);
+            newQuestion = questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
+          }
+        }
+        case MEDIUM, HARD -> {
+          currentDifficulty = QuestionLoader.decreaseDifficulty(currentDifficulty);
+          newQuestion = questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
+          if (newQuestion == null) {
+            switch (currentDifficulty) {
+              case EASY -> {
+                currentDifficulty = Question.Difficulty.HARD;
+                newQuestion = questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
+              }
+              case MEDIUM -> {
+                currentDifficulty = QuestionLoader.decreaseDifficulty(currentDifficulty);
+                newQuestion = questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
+              }
+            }
+          }
+        }
+      }
+    }
+    return newQuestion;
   }
 
   @Override
