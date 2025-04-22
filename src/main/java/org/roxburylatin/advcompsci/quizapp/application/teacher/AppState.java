@@ -178,12 +178,6 @@ public class AppState {
   }
 
   public static void addStudent(Student student) throws IllegalArgumentException {
-    // TODO - implement
-    //    if (getStudent(student.getFirstName(), student.getLastName()) != null) {
-    //      throw new IllegalArgumentException(
-    //          "A student with the same first name and last name already exists.");
-    //    }
-
     allStudents.add(student);
   }
 

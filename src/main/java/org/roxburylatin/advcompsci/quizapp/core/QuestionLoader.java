@@ -24,7 +24,6 @@ public interface QuestionLoader {
       case MEDIUM, HARD -> {
         return Question.Difficulty.HARD;
       }
-      // TODO - Make this nicer => would prefer not to have this throw clause
       default -> throw new UnknownError();
     }
   }
@@ -43,7 +42,6 @@ public interface QuestionLoader {
       case HARD -> {
         return Question.Difficulty.MEDIUM;
       }
-      // TODO - Make this nicer => would prefer not to have this throw clause
       default -> throw new UnknownError();
     }
   }

@@ -180,14 +180,12 @@ public class Server<T extends Enum<T>> {
                       out.println(e.getMessage());
                     }
                   } catch (IOException e) {
-                    // TODO - Error handling
                     if (isRunning()) {
                       System.err.println("Error accepting client connection: " + e.getMessage());
                     }
                   }
                 }
               } catch (IOException e) {
-                // TODO - Error handling
                 System.err.println("Error starting server: " + e.getMessage());
                 setRunning(false);
               }

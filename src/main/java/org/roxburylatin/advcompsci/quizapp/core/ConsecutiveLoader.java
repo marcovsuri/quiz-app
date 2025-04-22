@@ -37,7 +37,6 @@ public class ConsecutiveLoader implements QuestionLoader {
 
     numQuestionsInDifficulty++;
 
-    // TODO - refactor
     Question q = questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
     if (q == null) {
       if (currentDifficulty == Question.Difficulty.EASY) {

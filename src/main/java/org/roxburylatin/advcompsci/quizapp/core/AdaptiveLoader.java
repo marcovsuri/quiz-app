@@ -38,7 +38,6 @@ public class AdaptiveLoader implements QuestionLoader {
             ? QuestionLoader.increaseDifficulty(currentDifficulty)
             : QuestionLoader.decreaseDifficulty(currentDifficulty);
 
-    // TODO - refactor
     Question q = questionGroups.get(currentDifficulty).getAndRemoveRandomQuestion();
     if (q == null) {
       if (currentDifficulty == Question.Difficulty.EASY) {

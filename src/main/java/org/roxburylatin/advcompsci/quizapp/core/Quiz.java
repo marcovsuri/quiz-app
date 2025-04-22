@@ -71,8 +71,7 @@ public class Quiz {
    */
   public void submitAnswer(Question.Choice answer) throws IllegalStateException {
     if (currentQuestion == null) {
-      // TODO - Exception Message (correct exception type just needs nice message)
-      throw new IllegalStateException();
+      throw new IllegalStateException("Cannot submit answer without having loaded a question");
     }
 
     // Grade the selected question

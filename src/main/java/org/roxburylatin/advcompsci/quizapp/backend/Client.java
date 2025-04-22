@@ -39,7 +39,6 @@ public class Client<T extends Enum<T>> {
    */
   public @NotNull String send(@NotNull T requestType, @NotNull JSONObject jsonObject)
       throws ServerException {
-    // TODO - deal with errors
     try (Socket socket = new Socket(serverAddress, serverPort)) {
       PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
