@@ -67,9 +67,14 @@ public class AppState {
 
           StringBuilder csvContentBuilder = new StringBuilder();
 
-          // TODO - change csv location
-          try (BufferedReader reader =
-              new BufferedReader(new FileReader("chapter_" + chapterNum + "_questions.csv"))) {
+          // Get file from ~/quiz-app/chapter-questions/chapter_(chapter #)_questions.csv
+          String filePath =
+              System.getProperty("user.home")
+                  + "/quiz-app/chapter-questions/chapter_"
+                  + chapterNum
+                  + "_questions.csv";
+
+          try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
               csvContentBuilder.append(line).append('\n');
@@ -119,7 +124,14 @@ public class AppState {
           int numQuestionsCorrect = data.getInt("numQuestionsCorrect");
           int numQuestionsTotal = data.getInt("numQuestionsTotal");
 
-          String filePath = firstName + "_" + lastName + "_quiz_results.csv";
+          /* Write file to ~/quiz-app/student-results/(firstname, lowercase)_(lastname, lowercase)_quiz_results.csv */
+          String filePath =
+              System.getProperty("user.home")
+                  + "/quiz-app/student-results/"
+                  + firstName.toLowerCase()
+                  + "_"
+                  + lastName.toLowerCase()
+                  + "_quiz_results.csv";
 
           boolean writeHeaders = !(new File(filePath)).exists();
 
