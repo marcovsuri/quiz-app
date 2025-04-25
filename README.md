@@ -60,7 +60,8 @@ Teachers/testers must have the following directory structure on their home direc
     mkdir -p ~/quiz-app/student-results
     ```
 
-3. Generate question CSV files:
+3. Generate question CSV files: **You will need the raw XHTML files containing quiz questions and their answers from Mr.
+   Piper**
     - Navigate to the `/python` directory
     - Use the provided Python script to generate question CSV files from your source material
     - Place the generated CSV files in the `~/quiz-app/chapter-questions/` directory
@@ -149,3 +150,7 @@ Each package serves a specific purpose:
 - Bundle app as .app or .exe
 - Create new lifeline: Another one => allows students to get another question of similar difficulty without losing
   points
+- Lock screens so that students cannot switch tabs while taking an assessment
+- Store more specific data regarding a student's results on a quiz (which questions were asked, which questions the
+  student answered incorrectly, etc.)
+- Add functionality for make-up quizzes and earning points back
