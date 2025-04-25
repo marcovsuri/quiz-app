@@ -15,6 +15,22 @@ import org.roxburylatin.advcompsci.quizapp.backend.Client;
 import org.roxburylatin.advcompsci.quizapp.backend.ServerException;
 import org.roxburylatin.advcompsci.quizapp.core.*;
 
+/**
+ * The LandingViewController class is responsible for managing the landing view of the quiz
+ * application. It handles user input for starting a quiz, including first name, last name, IP
+ * address, port number, and chapter number. This class validates user input and initiates the quiz
+ * request to the server.
+ *
+ * <p>FXML Annotations: - The {@code goButton} is a button that triggers the quiz start process. -
+ * The {@code firstNameField} is a text field for entering the user's first name. - The {@code
+ * lastNameField} is a text field for entering the user's last name. - The {@code ipField} is a text
+ * field for entering the server's IP address. - The {@code portField} is a text field for entering
+ * the server's port number. - The {@code chapterComboBox} is a combo box for selecting the chapter
+ * number.
+ *
+ * <p>Methods: - {@code handleStartQuiz()}: Validates user input and initiates the quiz request to
+ * the server.
+ */
 public class LandingViewController {
   @FXML private Button goButton;
   @FXML private TextField firstNameField;
@@ -23,6 +39,14 @@ public class LandingViewController {
   @FXML private TextField portField;
   @FXML private ComboBox<String> chapterComboBox;
 
+  /**
+   * Handles the start quiz button click event. This method validates user input, constructs a
+   * request to the server, and initiates the quiz process. It ensures that all required fields are
+   * filled and that the port number is valid. If any validation fails, an error alert is displayed.
+   * If the quiz request is successful, it loads the quiz view.
+   *
+   * @throws IOException if there is an error loading the quiz view.
+   */
   @FXML
   private void handleStartQuiz() throws IOException {
     // Get user input

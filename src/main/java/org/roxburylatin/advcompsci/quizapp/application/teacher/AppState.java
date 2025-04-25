@@ -17,6 +17,12 @@ import org.roxburylatin.advcompsci.quizapp.application.teacher.Student.Progress;
 import org.roxburylatin.advcompsci.quizapp.backend.Server;
 import org.roxburylatin.advcompsci.quizapp.backend.ServerException;
 
+/**
+ * The AppState class serves as a centralized state manager for the teacher view of the quiz
+ * application. It maintains the state of the application, including the list of students, their
+ * progress, and server interactions. This class provides static methods and properties to interact
+ * with and modify the application state.
+ */
 public class AppState {
   static final Lock IOLock = new ReentrantLock();
   private static final ObservableList<Student> allStudents = FXCollections.observableArrayList();
@@ -162,25 +168,53 @@ public class AppState {
         true);
   }
 
+  /**
+   * Gets the list of all students in the application.
+   *
+   * @param progress the progress status of the students to filter by.
+   * @return an ObservableList containing all students.
+   */
   public static ObservableList<Student> getStudentsByProgress(Student.Progress progress) {
     FilteredList<Student> filteredList =
         new FilteredList<>(allStudents, student -> student.getProgress() == progress);
     return filteredList;
   }
 
+  /**
+   * Gets the needs update property which indicates whether the UI needs to be updated. Should be
+   * listened to by the UI for updates.
+   *
+   * @return the BooleanProperty indicating the update status.
+   */
   public static BooleanProperty needsUpdateProperty() {
     return needsUpdate;
   }
 
+  /**
+   * Signals that the UI needs to be updated. This method toggles the needsUpdate property to notify
+   * the UI of changes.
+   */
   public static void signalUpdate() {
     needsUpdate.set(!needsUpdate.get());
     System.out.println("Updated UI");
   }
 
-  public static void addStudent(Student student) throws IllegalArgumentException {
+  /**
+   * Adds a student to the list of all students.
+   *
+   * @param student the student to be added.
+   */
+  public static void addStudent(Student student) {
     allStudents.add(student);
   }
 
+  /**
+   * Gets a student by their first and last name.
+   *
+   * @param firstName the first name of the student.
+   * @param lastName the last name of the student.
+   * @return the student with the specified first and last name, or null if not found.
+   */
   public static Student getStudent(String firstName, String lastName) {
     Student s =
         allStudents.stream()
@@ -194,10 +228,16 @@ public class AppState {
     return s;
   }
 
+  /**
+   * Removes a student from the list of all students.
+   *
+   * @param student the student to be removed.
+   */
   public static void removeStudent(Student student) {
     allStudents.remove(student);
   }
 
+  /** Clears all students with {@code COMPLETED} progress from the list of all students. */
   public static void clearCompletedStudents() {
     // Remove all students with COMPLETED progress
     allStudents.removeIf(student -> student.getProgress() == Progress.COMPLETED);

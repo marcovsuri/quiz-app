@@ -12,6 +12,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+/**
+ * The TeacherViewController class manages the UI for the teacher's view in the quiz application. It
+ * handles the display of student progress across different tabs (requests, in-progress, and
+ * completed) and manages the server start/stop functionality.
+ */
 public class TeacherViewController {
   @FXML private Button startServerButton;
   @FXML private Text serverStatusText;
@@ -21,6 +26,12 @@ public class TeacherViewController {
   @FXML private TextField portField;
   @FXML private Text ipDisplay;
 
+  /**
+   * Retrieves the local IP address of the machine. This method iterates through the network
+   * interfaces and returns the first non-loopback IPv4 address found.
+   *
+   * @return the local IP address as a string, or "Unknown" if no suitable address is found
+   */
   private static String getLocalIpAddress() {
     try {
       Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
@@ -39,6 +50,11 @@ public class TeacherViewController {
     return "Unknown";
   }
 
+  /**
+   * Initializes the TeacherViewController. This method sets up the UI components, loads the FXML
+   * files for each tab, and configures the server button action. It also displays the local IP
+   * address.
+   */
   @FXML
   public void initialize() {
     try {
@@ -67,7 +83,14 @@ public class TeacherViewController {
     }
   }
 
-  // Method to check if a port is in use
+  /**
+   * Checks if a specific port is in use by attempting to create a socket connection to it. If the
+   * connection is successful, the port is considered in use. If an exception is thrown, the port is
+   * considered free.
+   *
+   * @param port the port number to check
+   * @return true if the port is in use, false otherwise
+   */
   private boolean isPortInUse(int port) {
     try (Socket socket = new Socket("localhost", port)) {
       return true; // Port is in use
@@ -76,6 +99,10 @@ public class TeacherViewController {
     }
   }
 
+  /**
+   * Handles the server button action. This method starts or stops the server based on its current
+   * state. It also validates the port input and updates the UI accordingly.
+   */
   private void handleServerButton() {
     boolean isServerRunning = AppState.server.isRunning();
 

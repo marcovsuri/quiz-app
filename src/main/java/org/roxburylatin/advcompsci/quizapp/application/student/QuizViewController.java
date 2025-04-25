@@ -17,10 +17,21 @@ import org.roxburylatin.advcompsci.quizapp.application.Request;
 import org.roxburylatin.advcompsci.quizapp.backend.ServerException;
 import org.roxburylatin.advcompsci.quizapp.core.Question;
 
+/**
+ * The QuizViewController class is responsible for managing the user interface and interactions for
+ * the quiz application. It handles the display of questions, choices, and quiz progress, as well as
+ * user actions such as selecting answers, using helper buttons, and submitting the quiz.
+ *
+ * <p>This controller interacts with the application state (AppState) to fetch and update quiz data,
+ * and communicates with the server for specific actions like asking for help or submitting the
+ * quiz.
+ *
+ * <p>FXML annotations are used to bind UI components and event handlers to the controller.
+ */
 public class QuizViewController {
   @FXML private Button fiftyFiftyButton;
   @FXML private Button askTeacherButton;
-  //  @FXML private Button anotherOneButton;
+  // @FXML private Button anotherOneButton;
   @FXML private Button submitButton;
 
   @FXML private WebView questionView;
@@ -31,6 +42,10 @@ public class QuizViewController {
 
   @FXML private Text title;
 
+  /**
+   * Initializes the QuizViewController. This method sets up listeners for UI updates and styles for
+   * the web views. It also loads the initial question and choices when the view is first displayed.
+   */
   @FXML
   public void initialize() {
     // Listen for changes in the current question
@@ -52,6 +67,13 @@ public class QuizViewController {
     loadView(AppState.getCurrentQuestion());
   }
 
+  /**
+   * Loads the view with the current question and choices. This method updates the UI components to
+   * display the question text, choices, and quiz progress. It also manages the visibility of helper
+   * buttons based on the current state of the quiz.
+   *
+   * @param question The current question to be displayed.
+   */
   private void loadView(Question question) {
     if (question != null) {
       fiftyFiftyButton.setVisible(true);
@@ -101,6 +123,14 @@ public class QuizViewController {
     }
   }
 
+  /**
+   * Generates the HTML content for the choices of the current question. This method constructs the
+   * HTML structure to display the choices in a formatted manner, including radio buttons for user
+   * selection.
+   *
+   * @param currentQuestion The current question for which choices are being generated.
+   * @return A string containing the HTML content for the choices.
+   */
   private String generateChoicesContent(Question currentQuestion) {
     StringBuilder html = new StringBuilder();
 
@@ -132,6 +162,11 @@ public class QuizViewController {
     return html.toString();
   }
 
+  /**
+   * Handles the Fifty-Fifty button click event. This method randomly removes two incorrect choices
+   * from the available options, helping the user narrow down their selection. It updates the UI to
+   * reflect the changes and disables the Fifty-Fifty button after use.
+   */
   @FXML
   private void handleFiftyFifty() {
     Question.Choice[] choices = {
@@ -173,6 +208,11 @@ public class QuizViewController {
     fiftyFiftyButton.setDisable(true);
   }
 
+  /**
+   * Handles the Ask Teacher button click event. This method sends a request to the server to ask
+   * for help, including the user's name in the request. It updates the UI to reflect the action and
+   * disables the Ask Teacher button after use.
+   */
   @FXML
   private void handleAskTeacher() {
     if (AppState.client == null || AppState.firstName == null || AppState.lastName == null) {
@@ -204,6 +244,11 @@ public class QuizViewController {
     }
   }
 
+  /**
+   * Handles the Submit button click event. This method processes the user's selected answer,
+   * submits it to the quiz, and checks if the quiz is finished. If the quiz is finished, it sends
+   * the results to the server and transitions to the end view.
+   */
   @FXML
   private void handleSubmit() {
     if (AppState.quizSubmitted) {
